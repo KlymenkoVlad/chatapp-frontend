@@ -1,4 +1,4 @@
-import Login from "@/components/pages/Login/Login";
+import Signup from "@/components/ClientSidePages/Signup/Signup";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <Login />
+      <Signup />
     </>
   );
 }

@@ -4,26 +4,19 @@ import Image from "next/image";
 import React from "react";
 import dateFormat from "@/utils/dateFormat";
 import { useChatStore } from "@/src/store";
+import { IChat } from "@/types/interfaces";
 
-interface Chat {
-  name: string;
-  lastMessage?: string;
-  lastMessageDate: string;
-  messageWith: string;
-}
-
-const Chat = ({ name, lastMessage, lastMessageDate, messageWith }: Chat) => {
+const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
   // Call the dateFormat function and store its result in formattedDate
 
-  const formattedDate = dateFormat(lastMessageDate);
+  const formattedDate = dateFormat(date);
 
   return (
     <div className="lg:w-[400px] w-[250px]  mx-auto bg-white shadow-md rounded-md mt-4 mb-2 hover:bg-slate-100 ">
       <div
         className="p-4 cursor-pointer"
         onClick={() => {
-          useChatStore.setState({ activeChat: messageWith });
-          localStorage.setItem("activeChat", messageWith);
+          useChatStore.setState({ activeChat: messagesWith });
         }}
       >
         <div className="flex items-center space-x-3">
@@ -35,7 +28,7 @@ const Chat = ({ name, lastMessage, lastMessageDate, messageWith }: Chat) => {
             />
           </div>
           <div className="flex-1">
-            <p className="font-semibold">{name}</p>
+            <p className="font-semibold">{user.username}</p>
             <p className="text-gray-500 text-sm">
               Last message: {lastMessage ? lastMessage : "No messages yet"}
             </p>

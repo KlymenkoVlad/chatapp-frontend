@@ -14,20 +14,14 @@ import dateFormat from "@/utils/dateFormat";
 import { string } from "yup";
 import { Socket } from "socket.io-client"; // Import the Socket type
 import Message from "./Message";
-
-interface IMessage {
-  date: string;
-  _id: string;
-  msg: string;
-  receiver: string;
-  sender: string;
-}
+import { IMessage } from "@/types/interfaces";
 
 const MessageBar = () => {
   const [messages, setMessages] = useState<IMessage[] | []>([]);
   const [messageInput, setMessageInput] = useState("");
 
   const activeChat = useChatStore((state) => state.activeChat);
+  const userId = useChatStore((state) => state.userId);
 
   const socket = useRef<Socket | null>();
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -46,7 +40,7 @@ const MessageBar = () => {
     }
 
     if (socket.current) {
-      socket.current.emit("join", { userId: localStorage.getItem("userId") });
+      socket.current.emit("join", { userId });
     }
 
     return () => {
@@ -63,7 +57,7 @@ const MessageBar = () => {
         socket.current = io(baseUrl);
       }
       socket?.current.emit("loadMessages", {
-        userId: localStorage.getItem("userId"),
+        userId,
         receiver: activeChat,
         messagesWith: activeChat,
       });
@@ -103,7 +97,7 @@ const MessageBar = () => {
         socket.current = io(baseUrl);
       }
       socket.current.emit("sendNewMsg", {
-        userId: localStorage.getItem("userId"),
+        userId,
         msgSendToUserId: activeChat, // Replace with the recipient's ID
         msg: messageInput,
       });
@@ -126,11 +120,7 @@ const MessageBar = () => {
           <div className="space-y-2">
             {messages &&
               messages.map((message, index) => (
-                <Message
-                  key={index}
-                  userId={localStorage.getItem("userId")}
-                  {...message}
-                />
+                <Message key={index} userId={userId} {...message} />
               ))}
           </div>
         </div>
