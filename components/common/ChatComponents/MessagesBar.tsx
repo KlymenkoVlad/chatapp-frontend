@@ -80,27 +80,17 @@ const MessageBar = () => {
     if (socket.current) {
       socket.current.on("msgSent", ({ newMsg }) => {
         console.log("msgSent emit");
-        console.log(newMsg.sender, localStorage.getItem("activeChat"));
-        if (newMsg.receiver === localStorage.getItem("activeChat")) {
+        console.log(newMsg.sender, activeChat);
+        if (newMsg.receiver === activeChat) {
           setMessages((prev) => [...prev, newMsg]);
-
-          // setChats((prev) => {
-          //   const previousChat = prev.find(
-          //     (chat) => chat.messagesWith === newMsg.receiver
-          //   );
-          //   previousChat.lastMessage = newMsg.msg;
-          //   previousChat.date = newMsg.date;
-
-          //   return [...prev];
-          // });
         }
       });
 
       socket.current.on("newMsgReceived", async ({ newMsg }) => {
         // WHEN CHAT WITH SENDER IS CURRENTLY OPENED INSIDE YOUR BROWSER
         console.log("newMsgReceived emit");
-        console.log(newMsg.sender, localStorage.getItem("activeChat"));
-        if (newMsg.sender === localStorage.getItem("activeChat")) {
+        console.log(newMsg.sender, activeChat);
+        if (newMsg.sender === activeChat) {
           setMessages((prev) => [...prev, newMsg]);
         }
       });

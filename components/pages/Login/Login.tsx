@@ -8,7 +8,6 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { baseUrl } from "@/utils/baseUrl";
-import { useChatStore } from "@/src/store";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -42,7 +41,6 @@ export default function Login() {
                 headers: { Authorization: res.data.token },
               });
 
-              // useChatStore.setState({ userId: data._id });
               localStorage.setItem("userId", data._id);
 
               router.push("/");

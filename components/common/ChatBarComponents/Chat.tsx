@@ -1,17 +1,20 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
-import { useChatStore } from "@/src/store";
 import dateFormat from "@/utils/dateFormat";
+import { useChatStore } from "@/src/store";
 
 interface Chat {
   name: string;
-  lastMessage: string;
+  lastMessage?: string;
   lastMessageDate: string;
   messageWith: string;
 }
 
 const Chat = ({ name, lastMessage, lastMessageDate, messageWith }: Chat) => {
   // Call the dateFormat function and store its result in formattedDate
+
   const formattedDate = dateFormat(lastMessageDate);
 
   return (
@@ -33,7 +36,9 @@ const Chat = ({ name, lastMessage, lastMessageDate, messageWith }: Chat) => {
           </div>
           <div className="flex-1">
             <p className="font-semibold">{name}</p>
-            <p className="text-gray-500 text-sm">Last message: {lastMessage}</p>
+            <p className="text-gray-500 text-sm">
+              Last message: {lastMessage ? lastMessage : "No messages yet"}
+            </p>
           </div>
           <div>
             <p className="text-gray-500 text-sm">{formattedDate}</p>
