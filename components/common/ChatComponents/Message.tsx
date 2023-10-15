@@ -1,16 +1,15 @@
+import { IMessage } from "@/types/interfaces";
 import dateFormat from "@/utils/dateFormat";
 import React from "react";
 
-interface Message {
-  date: string;
-  _id: string;
-  msg: string;
-  receiver: string;
-  sender: string;
-  userId: string | null;
-}
-
-const Message = ({ date, _id, msg, receiver, sender, userId }: Message) => {
+const Message = ({
+  date,
+  _id,
+  msg,
+  receiver,
+  sender,
+  userId,
+}: IMessage & { userId?: string }) => {
   return (
     <div
       className={`flex w-full mt-2 space-x-3 max-w-xs ${

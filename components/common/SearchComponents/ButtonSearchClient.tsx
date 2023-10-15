@@ -1,19 +1,21 @@
 "use client";
 
 import React from "react";
-import { baseUrl } from "@/utils/baseUrl";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+
+import { baseUrl } from "@/utils/baseUrl";
 import { useChatStore } from "@/src/store";
-const handleStartTalk = async (userIdReceiver: string, userId: string) => {
-  console.log("fasdf");
-  console.log(userId, userIdReceiver);
+
+const handleStartTalk = async (userIdReceiver: string, userId?: string) => {
+  if (!userId) {
+    console.error("no user id");
+  }
+
   const { data } = await axios.post(`${baseUrl}/api/chat`, {
     userId,
     msgSendToUserId: userIdReceiver,
   });
-
-  console.log(data);
 
   if (typeof data.message !== "string") {
     useChatStore.setState({ chats: [...useChatStore.getState().chats, data] });
@@ -22,13 +24,13 @@ const handleStartTalk = async (userIdReceiver: string, userId: string) => {
   useChatStore.setState({ activeChat: userIdReceiver });
 };
 
-interface Props {
+interface ButtonProps {
   id: string;
 }
 
-const ButtonSearchClient = ({ id }: Props) => {
+const ButtonSearchClient = ({ id }: ButtonProps) => {
   const router = useRouter();
-  const userId = localStorage.getItem("userId");
+  const userId = useChatStore((state) => state.userId);
 
   return (
     <button
