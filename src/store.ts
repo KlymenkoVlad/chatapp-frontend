@@ -3,7 +3,8 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 interface ChatState {
-  activeChat?: string;
+  activeChatId?: string;
+  activeChatUsername?: string;
   userId?: string;
   chats: IChat[];
 }
@@ -12,6 +13,7 @@ export const useChatStore = create(
   persist<ChatState>(
     (set, get) => ({
       activeChat: undefined,
+      activeChatUsername: undefined,
       userId: undefined,
       chats: [],
     }),

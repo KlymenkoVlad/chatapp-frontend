@@ -16,7 +16,8 @@ const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
       <div
         className="p-4 cursor-pointer"
         onClick={() => {
-          useChatStore.setState({ activeChat: messagesWith });
+          useChatStore.setState({ activeChatId: messagesWith });
+          useChatStore.setState({ activeChatUsername: user.username });
         }}
       >
         <div className="flex items-center space-x-3">
