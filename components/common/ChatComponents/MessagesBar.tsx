@@ -1,31 +1,29 @@
 "use client";
 
-//TODO: don`t work updating message, so need to fix
-
-//TODO: problem is in the activeChat, it is null, so i better way is to get active chat from path, like paste here id
-
 import { useEffect, useRef, useState } from "react";
 import { useChatStore } from "@/src/store";
-import io from "socket.io-client"; // Import the socket.io-client library
+import io from "socket.io-client";
 import { baseUrl } from "@/utils/baseUrl";
-import { Socket } from "socket.io-client"; // Import the Socket type
+import { Socket } from "socket.io-client";
 import Message from "./Message";
 import { IMessage } from "@/types/interfaces";
 
 const MessageBar = () => {
   const [messages, setMessages] = useState<IMessage[] | []>([]);
   const [messageInput, setMessageInput] = useState("");
-  const [userTyping, setUserTyping] = useState(null);
-  const [typingTimer, setTypingTimer] = useState(null);
+  const [userTyping, setUserTyping] = useState<undefined | string>(undefined);
+  const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | undefined>(
+    undefined
+  );
 
-  const activeChat = useChatStore((state) => state.activeChatId);
+  const activeChatId = useChatStore((state) => state.activeChatId);
   const activeChatUsername = useChatStore((state) => state.activeChatUsername);
-
   const userId = useChatStore((state) => state.userId);
 
   const socket = useRef<Socket | null>();
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
+  // Scroll to the bottom of the messages container if new messages are added
   useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
@@ -33,7 +31,7 @@ const MessageBar = () => {
     }
   }, [messages]);
 
-  // When the component mounts, join the chat room
+  // When the component mounts, join the chat room and disconnect.
   useEffect(() => {
     if (!socket.current) {
       socket.current = io(baseUrl);
@@ -51,12 +49,14 @@ const MessageBar = () => {
     };
   }, []);
 
+  // Load the messages for the current chat
   useEffect(() => {
     const loadMessages = () => {
+      if (!socket.current) return;
       socket?.current.emit("loadMessages", {
         userId,
-        receiver: activeChat,
-        messagesWith: activeChat,
+        receiver: activeChatId,
+        messagesWith: activeChatId,
       });
 
       socket?.current.on("messagesLoaded", async ({ chat }) => {
@@ -65,50 +65,60 @@ const MessageBar = () => {
       });
     };
 
-    if (socket.current && activeChat) loadMessages();
-  }, [activeChat]);
+    if (socket.current && activeChatId) loadMessages();
+  }, [activeChatId]);
 
+  // If a message is sent, add it to the list of messages
+  useEffect(() => {
+    if (!socket.current) return;
+    socket.current.on("msgSent", ({ newMsg }) => {
+      console.log("activeChatId", activeChatId);
+      console.log("newMsg", newMsg);
+      if (newMsg.receiver === activeChatId) {
+        setMessages((prev) => [...prev, newMsg]);
+      }
+    });
+  }, [activeChatId]);
+
+  // If a message is received, add it to the list of messages
   useEffect(() => {
     if (socket.current) {
-      socket.current.on("msgSent", ({ newMsg }) => {
-        console.log("msgSent emit");
-        console.log(newMsg.sender, activeChat);
-        if (newMsg.receiver === activeChat) {
-          setMessages((prev) => [...prev, newMsg]);
-        }
-      });
-
       socket.current.on("newMsgReceived", async ({ newMsg }) => {
-        // WHEN CHAT WITH SENDER IS CURRENTLY OPENED INSIDE YOUR BROWSER
-        console.log("newMsgReceived emit");
-        console.log(newMsg.sender, activeChat);
-        if (newMsg.sender === activeChat) {
+        console.log("activeChatId", activeChatId);
+        console.log("newMsg", newMsg);
+        if (newMsg.sender === activeChatId) {
           setMessages((prev) => [...prev, newMsg]);
         }
       });
     }
-  }, []);
+  }, [activeChatId]);
 
+  // Set the user's typing status
   useEffect(() => {
-    socket.current.on("userTyping", (userId) => {
-      console.log(userId, activeChat);
+    if (!socket.current) return;
 
-      if (userId === activeChat) {
+    socket.current.on("userTyping", (userId) => {
+      console.log(userId, activeChatId);
+
+      if (userId === activeChatId) {
         setUserTyping(activeChatUsername + " is typing...");
       }
     });
 
     socket.current.on("userStoppedTyping", () => {
-      setUserTyping(null);
+      setUserTyping(undefined);
     });
 
     return () => {
+      if (!socket.current) return;
       socket.current.off("userTyping");
       socket.current.off("userStoppedTyping");
     };
-  }, [activeChat]);
+  }, [activeChatId]);
 
-  const handleTyping = (event) => {
+  const handleTyping = () => {
+    if (!socket.current) return;
+
     // Clear the previous timer if it exists
     if (typingTimer) {
       clearTimeout(typingTimer);
@@ -116,37 +126,40 @@ const MessageBar = () => {
 
     // Start a new timer
     const newTypingTimer = setTimeout(() => {
+      if (!socket.current) return;
+
       // If this timer expires, the user stopped typing, so emit the "stopTyping" event
       socket.current.emit("stopTyping");
-    }, 2000); // Adjust the time as needed (e.g., 2000 milliseconds = 2 seconds)
+    }, 2000); // 2000 milliseconds = 2 seconds
 
     // Update the typing timer in the state
     setTypingTimer(newTypingTimer);
 
     // Emit the "typing" event
-    socket.current.emit("typing", userId, activeChat);
+    socket.current.emit("typing", userId, activeChatId);
   };
 
   const handleStopTyping = () => {
+    if (!socket.current) return;
+
     // Clear the timer when the user stops typing
     if (typingTimer) {
       clearTimeout(typingTimer);
     }
 
-    // Emit the "stopTyping" event
     socket.current.emit("stopTyping");
   };
 
   const handleSendMessage = () => {
+    if (!socket.current) return;
+
     if (messageInput.trim() !== "") {
       socket.current.emit("sendNewMsg", {
         userId,
-        msgSendToUserId: activeChat, // Replace with the recipient's ID
+        msgSendToUserId: activeChatId,
         msg: messageInput,
       });
 
-      // Update the local state for immediate display
-      console.log(messages);
       setMessageInput("");
     }
   };
@@ -168,7 +181,7 @@ const MessageBar = () => {
           </div>
         </div>
         <div className="mt-8 absolute bottom-10 w-[85%] right-10">
-          {userTyping && <p className="mb-2">{userTyping}</p>}
+          {userTyping && <p className="mb-2">{userTyping} is typing...</p>}
 
           <div className="flex ">
             <input
