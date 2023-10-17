@@ -86,7 +86,7 @@ export default async function Page({ params }: PageProps) {
                     />
                   </a>
                   <div>
-                    <ButtonSearchClient id={user._id} />
+                    <ButtonSearchClient user={user} />
                   </div>
                 </div>
                 <p className="text-base font-semibold leading-none text-gray-900 ">
