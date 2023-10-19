@@ -7,10 +7,9 @@ import { useChatStore } from "@/src/store";
 import { IChat } from "@/types/interfaces";
 
 const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
-  // Call the dateFormat function and store its result in formattedDate
-
   const formattedDate = dateFormat(date);
 
+  console.log(user.mainPicture);
   return (
     <div className="lg:w-[400px] w-[250px]  mx-auto bg-white shadow-md rounded-md mt-4 mb-2 hover:bg-slate-100 ">
       <div
@@ -23,13 +22,15 @@ const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
         <div className="flex items-center space-x-3">
           <div className="flex-shrink-0">
             <img
-              src="https://t3.ftcdn.net/jpg/02/99/04/20/360_F_299042079_vGBD7wIlSeNl7vOevWHiL93G4koMM967.jpg"
-              alt="Avatar"
+              src={user.mainPicture}
+              alt={user.username}
               className="w-10 h-10 rounded-full"
             />
           </div>
           <div className="flex-1">
-            <p className="font-semibold">{user.username}</p>
+            <p className="font-semibold">
+              {`${user.name} ${user.lastname ? user.lastname : ""}`}
+            </p>
             <p className="text-gray-500 text-sm">
               Last message: {lastMessage ? lastMessage : "No messages yet"}
             </p>

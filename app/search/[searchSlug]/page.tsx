@@ -81,7 +81,7 @@ export default async function Page({ params }: PageProps) {
                   <a href="#">
                     <img
                       className="w-10 h-10 rounded-full"
-                      src="https://t3.ftcdn.net/jpg/02/99/04/20/360_F_299042079_vGBD7wIlSeNl7vOevWHiL93G4koMM967.jpg"
+                      src={user.mainPicture}
                       alt={user.username}
                     />
                   </a>
@@ -90,12 +90,12 @@ export default async function Page({ params }: PageProps) {
                   </div>
                 </div>
                 <p className="text-base font-semibold leading-none text-gray-900 ">
-                  <a href="#">Jese Leos</a>
+                  <a href="#">
+                    {`${user.name} ${user.lastname ? user.lastname : ""}`}
+                  </a>
                 </p>
                 <p className="mb-3 text-sm font-normal">@{user.username}</p>
-                <p className="mb-4 text-sm">
-                  Open-source contributor. Building
-                </p>
+                <p className="mb-4 text-sm">TODO: Implement user description</p>
               </div>
             </div>
           ))}
