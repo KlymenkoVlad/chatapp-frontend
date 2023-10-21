@@ -12,19 +12,7 @@ import { useChatStore } from "@/src/store";
 import PreviewImage from "./components/PreviewImage";
 
 const SignupSchema = Yup.object().shape({
-  mainPicture: Yup.mixed()
-    .test("FILE_SIZE", "Too big!", (value) => {
-      if (value && (value as File).size) {
-        return (value as File).size < 2024 * 2024;
-      }
-      return false;
-    })
-    .test("FILE_TYPE", "Invalid file type", (value) => {
-      if (value && (value as File).type) {
-        return ["image/png", "image/jpeg"].includes((value as File).type);
-      }
-      return false;
-    }),
+  mainPicture: Yup.mixed(),
   username: Yup.string()
     .min(2, "Atleast 2 characters")
     .required("Username is required"),

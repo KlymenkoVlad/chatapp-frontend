@@ -5,6 +5,9 @@ import { cookies } from "next/headers";
 import { baseUrl } from "@/utils/baseUrl";
 import ButtonSearchClient from "@/components/common/SearchComponents/ButtonSearchClient";
 import { IUser } from "@/types/interfaces";
+import { tokenCheckClient } from "@/utils/authorizationCheck";
+import { redirect } from "next/navigation";
+import ButtonReturnSearchClient from "@/components/common/SearchComponents/ButtonReturnSearchClient";
 
 export const metadata: Metadata = {
   title: "Search",
@@ -47,6 +50,8 @@ async function getData({
 }
 
 export default async function Page({ params }: PageProps) {
+  tokenCheckClient();
+
   const cookieStore = cookies();
   const token = cookieStore.get("token");
 
@@ -63,13 +68,16 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <>
-      <h1 className="text-3xl font-bold text-center ms:mt-24 mt-16">
-        {users
-          ? "That's all we could find on your request "
-          : "We can`t find anything by your request "}
-        <span className="text-blue-600">{params.searchSlug}</span>
-      </h1>
-      <div className="flex justify-around items-center gap-3 mx-14 mb-16 ms:mt-24 mt-16">
+      <div className="text-center mx-3">
+        <h1 className="text-3xl font-bold ms:mt-24 mt-16 mb-2">
+          {users
+            ? "That's all we could find on your request "
+            : "We can`t find anything by your request "}
+          <span className="text-blue-600">{params.searchSlug}</span>
+        </h1>
+        <ButtonReturnSearchClient />
+      </div>
+      <div className="flex justify-around items-center gap-3 mx-14 mb-16 ms:mt-24 mt-16 flex-wrap">
         {users &&
           users.map((user) => (
             <div

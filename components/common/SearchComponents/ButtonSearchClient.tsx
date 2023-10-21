@@ -2,7 +2,7 @@
 
 import React from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 import { baseUrl } from "@/utils/baseUrl";
 import { useChatStore } from "@/src/store";
@@ -26,7 +26,6 @@ const handleStartTalk = async (
     useChatStore.setState({ chats: [...useChatStore.getState().chats, data] });
   }
 
-  useChatStore.setState({ activeChatId: userIdReceiver });
   useChatStore.setState({ activeChatUsername: username });
 };
 
@@ -44,7 +43,7 @@ const ButtonSearchClient = ({ user }: ButtonSearchClientProps) => {
       type="button"
       onClick={() => {
         handleStartTalk(user._id, userId, user.username);
-        router.push("/");
+        router.push(`/chat/${user._id}`);
       }}
       className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1.5 "
     >

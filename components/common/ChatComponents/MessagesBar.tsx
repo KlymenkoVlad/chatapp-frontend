@@ -6,22 +6,44 @@ import io from "socket.io-client";
 import { baseUrl } from "@/utils/baseUrl";
 import { Socket } from "socket.io-client";
 import Message from "./Message";
-import { IMessage } from "@/types/interfaces";
+import { IMessage, IUser } from "@/types/interfaces";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const MessageBar = () => {
+  const [receiverUser, setReceiverUser] = useState<undefined | IUser>(
+    undefined
+  );
   const [messages, setMessages] = useState<IMessage[] | []>([]);
   const [messageInput, setMessageInput] = useState("");
   const [userTyping, setUserTyping] = useState<undefined | string>(undefined);
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | undefined>(
     undefined
   );
+  const { chatSlug: activeChatId } = useParams();
+  const router = useRouter();
 
-  const activeChatId = useChatStore((state) => state.activeChatId);
+  // const activeChatId = useChatStore((state) => state.activeChatId);
   const activeChatUsername = useChatStore((state) => state.activeChatUsername);
   const userId = useChatStore((state) => state.userId);
 
   const socket = useRef<Socket | null>();
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const { data } = await axios.get(`${baseUrl}/api/user/${activeChatId}`);
+        setReceiverUser(data);
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchChats();
+  }, []);
 
   // Scroll to the bottom of the messages container if new messages are added
   useEffect(() => {
@@ -166,9 +188,51 @@ const MessageBar = () => {
 
   return (
     <div
-      className={`ml-4 w-full min-h-[70vh] mx-auto bg-white shadow-md rounded-md relative`}
+      className={`md:ml-4 w-full min-h-[70vh] mx-auto bg-white shadow-md rounded-md relative`}
     >
       <div className="p-4">
+        <div className="p-3 flex items-center font-bold">
+          <button
+            type="button"
+            onClick={() => router.push("/")}
+            className="mr-5 h-[40px] w-[40px] inline-flex md:hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center  items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            <svg
+              className="w-4 h-4 rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 10"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M1 5h12m0 0L9 1m4 4L9 9"
+              />
+            </svg>
+          </button>
+
+          {receiverUser ? (
+            <div className="flex items-center">
+              <img
+                src={receiverUser.mainPicture}
+                alt={receiverUser.username}
+                className="w-10 h-10 rounded-full mr-5"
+              />
+
+              <p className=" font-bold">{receiverUser.name}</p>
+            </div>
+          ) : (
+            <div className="flex items-center">
+              <div className="w-10 h-10 bg-gray-400 rounded-full mr-5"></div>
+
+              <p>Loading...</p>
+            </div>
+          )}
+        </div>
+        <div className="w-full h-[1px] bg-gray-200 mb-4"></div>
         <div
           className="overflow-y-auto h-[70vh] mb-24 px-4"
           ref={messagesContainerRef}
@@ -197,7 +261,7 @@ const MessageBar = () => {
               className="ml-2 py-2 px-4 bg-blue-500 text-white rounded-full"
               onClick={handleSendMessage}
             >
-              Send to
+              Send
             </button>
           </div>
         </div>
