@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function Home() {
   tokenCheckClient();
   return (
-    <main className="px-4 sm:px-12 py-5">
+    <main className="px-4 sm:px-12 py-5 flex items-start">
       <ChatBar />
     </main>
   );

@@ -16,7 +16,7 @@ export default async function Page({ params }: PageProps) {
   tokenCheckClient();
   return (
     <main className="max-w-full flex items-start px-1 ms:px-5 py-5">
-      <div className="hidden md:block">
+      <div className="hidden md:block ">
         <ChatBar />
       </div>
       <MessageBar />

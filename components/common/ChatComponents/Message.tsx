@@ -12,7 +12,7 @@ const Message = ({
 }: IMessage & { userId?: string }) => {
   return (
     <div
-      className={`flex max-w-full mt-2 space-x-3  ${
+      className={`flex max-w-[400px] mt-2 space-x-3  ${
         sender === userId && "ml-auto justify-end"
       } `}
       key={_id}
