@@ -21,11 +21,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className + " h-screen"}>
         <Header />
         <Toaster richColors position="top-center" />
         {children}
-        <Footer />
+        {/* <Footer /> */}
       </body>
     </html>
   );

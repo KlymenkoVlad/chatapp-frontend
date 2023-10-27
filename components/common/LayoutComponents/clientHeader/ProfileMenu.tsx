@@ -35,7 +35,7 @@ const ProfileMenu = ({ user }: { user: IUser }) => {
         <span className="sr-only">Open user menu</span>
         {user.mainPicture ? (
           <img
-            className="w-12 h-12 rounded-full"
+            className="w-10 h-10 rounded-full"
             src={user.mainPicture}
             alt="user photo"
           />

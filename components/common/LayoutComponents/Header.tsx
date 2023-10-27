@@ -32,12 +32,11 @@ const Header = async () => {
   //TODO: Not work showing of header when i go from login page
   const token = tokenCheckClient(false);
   const user = await getData(token);
-  console.log(user);
 
   return (
     token && (
       <nav className="bg-white border-gray-200 ">
-        <div className="max-w-screen-xl flex items-center justify-evenly mx-auto p-4">
+        <div className="max-w-screen-xl flex items-center justify-evenly mx-auto p-2">
           <Search />
           <ProfileMenu user={user} />
         </div>

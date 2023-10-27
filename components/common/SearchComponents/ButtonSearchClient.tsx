@@ -22,8 +22,14 @@ const handleStartTalk = async (
     msgSendToUserId: userIdReceiver,
   });
 
-  if (typeof data.message !== "string") {
-    useChatStore.setState({ chats: [...useChatStore.getState().chats, data] });
+  // Check if the chat entry already exists in the state
+  const chatExists = useChatStore
+    .getState()
+    .chats.some((chat) => chat.messagesWith === data.messagesWith);
+
+  if (!chatExists && typeof data.message !== "string") {
+    const updatedChats = [...useChatStore.getState().chats, data];
+    useChatStore.setState({ chats: updatedChats });
   }
 
   useChatStore.setState({ activeChatUsername: username });
@@ -36,7 +42,6 @@ interface ButtonSearchClientProps {
 const ButtonSearchClient = ({ user }: ButtonSearchClientProps) => {
   const router = useRouter();
   const userId = useChatStore((state) => state.userId);
-  useChatStore.setState({ activeChatUsername: user.username });
 
   return (
     <button

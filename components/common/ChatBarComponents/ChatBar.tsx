@@ -27,7 +27,7 @@ const ChatBar = () => {
         const { data } = await axios.get(`${baseUrl}/api/chat`, {
           headers: { Authorization: token },
         });
-        console.log(data);
+        // console.log(data);
         useChatStore.setState({ chats: data });
       } catch (error) {
         console.error(error);
@@ -39,9 +39,13 @@ const ChatBar = () => {
 
   return (
     <div>
-      {chats &&
-        chats.length > 0 &&
-        chats.map((chat) => <Chat key={chat.messagesWith} {...chat} />)}
+      {chats && chats.length > 0 ? (
+        chats.map((chat) => <Chat key={chat.messagesWith} {...chat} />)
+      ) : (
+        <p className="text-center font-bold text-2xl md:text-5xl">
+          No chats yet, you can find it above
+        </p>
+      )}
     </div>
   );
 };

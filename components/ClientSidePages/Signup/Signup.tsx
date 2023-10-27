@@ -72,7 +72,7 @@ export default function Signup() {
                 mainPicture: mainImg ? mainImg : undefined,
               };
 
-              console.log(body);
+              // console.log(body);
               const res = await axios.post(`${baseUrl}/api/signup`, body);
               Cookies.set("token", res.data.token);
 

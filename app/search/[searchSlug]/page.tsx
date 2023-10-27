@@ -55,14 +55,10 @@ export default async function Page({ params }: PageProps) {
   const cookieStore = cookies();
   const token = cookieStore.get("token");
 
-  console.log(params.searchSlug);
-
   const users: IUser[] | undefined = await getData({
     token: token?.value,
     searchSlug: params.searchSlug,
   });
-
-  console.log(users);
 
   //TODO: INSERT NAME
 
@@ -103,7 +99,7 @@ export default async function Page({ params }: PageProps) {
                   </a>
                 </p>
                 <p className="mb-3 text-sm font-normal">@{user.username}</p>
-                <p className="mb-4 text-sm">TODO: Implement user description</p>
+                {/* <p className="mb-4 text-sm">TODO: Implement user description</p> */}
               </div>
             </div>
           ))}

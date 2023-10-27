@@ -8,6 +8,10 @@ interface ChatState {
   chats: IChat[];
 }
 
+interface MessageStore {
+  messageEdit?: string;
+}
+
 export const useChatStore = create(
   persist<ChatState>(
     (set, get) => ({
@@ -20,3 +24,7 @@ export const useChatStore = create(
     }
   )
 );
+
+export const useMessageStore = create<MessageStore>()((set) => ({
+  messageEdit: undefined,
+}));

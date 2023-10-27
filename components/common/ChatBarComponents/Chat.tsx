@@ -9,8 +9,6 @@ import truncateString from "@/utils/truncateString";
 import Link from "next/link";
 
 const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
-  const formattedDate = dateFormat(date);
-
   return (
     <div className="transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-105 duration-300 max-w-[700px] min-w-[320px] w-full  mx-auto bg-white shadow-md rounded-md mt-4 mb-2 hover:bg-slate-100 ">
       <Link href={`/chat/${messagesWith}`} shallow={true}>
@@ -41,7 +39,9 @@ const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
               </p>
             </div>
             <div>
-              <p className="text-gray-500 text-sm">{formattedDate}</p>
+              <p className="text-gray-500 text-sm">
+                {date && dateFormat(date)}
+              </p>
             </div>
           </div>
         </div>

@@ -34,7 +34,7 @@ export default function Login() {
             const dataSubmit = async () => {
               const res = await axios.post(`${baseUrl}/api/login`, values);
 
-              console.log(res.data.token);
+              // console.log(res.data.token);
 
               Cookies.set("token", res.data.token);
 

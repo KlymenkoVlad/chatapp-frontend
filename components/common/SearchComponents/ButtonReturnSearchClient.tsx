@@ -1,11 +1,7 @@
-"use client";
-
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React from "react";
 
 const ButtonReturnSearchClient = () => {
-  const router = useRouter();
   return (
     <Link href={"/"}>
       <div className="mt-4 mr-2 h-[40px] w-[40px] inline-flex  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center  items-center  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
