@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { baseUrl } from "@/utils/baseUrl";
+import { useChatStore } from "@/src/store";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -33,7 +34,7 @@ export default function Login() {
             const dataSubmit = async () => {
               const res = await axios.post(`${baseUrl}/api/login`, values);
 
-              console.log(res.data.token);
+              // console.log(res.data.token);
 
               Cookies.set("token", res.data.token);
 
@@ -41,7 +42,7 @@ export default function Login() {
                 headers: { Authorization: res.data.token },
               });
 
-              localStorage.setItem("userId", data._id);
+              useChatStore.setState({ userId: data._id });
 
               router.push("/");
               setSubmitting(false);

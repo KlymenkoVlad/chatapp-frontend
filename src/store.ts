@@ -1,29 +1,22 @@
+import { IChat } from "@/types/interfaces";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-
-interface ChatMessage {
-  messagesWith: string;
-  user: {
-    _id: string;
-    username: string;
-    email: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  };
-  lastMessage?: string;
-  date: string;
-}
+import { persist } from "zustand/middleware";
 
 interface ChatState {
-  activeChat: null | string;
-  chats: ChatMessage[];
+  activeChatUsername?: string;
+  userId?: string;
+  chats: IChat[];
+}
+
+interface MessageStore {
+  messageEdit?: string;
 }
 
 export const useChatStore = create(
   persist<ChatState>(
     (set, get) => ({
-      activeChat: null,
+      activeChatUsername: undefined,
+      userId: undefined,
       chats: [],
     }),
     {
@@ -31,3 +24,7 @@ export const useChatStore = create(
     }
   )
 );
+
+export const useMessageStore = create<MessageStore>()((set) => ({
+  messageEdit: undefined,
+}));

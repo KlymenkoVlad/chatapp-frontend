@@ -1,7 +1,10 @@
 import dayjs from "dayjs";
 
-const dateFormat = (date: string) => {
-  if (!date) return "";
+const dateFormat = (date?: string) => {
+  if (!date) {
+    console.error("No date provided");
+    return "";
+  }
   const messageDate = dayjs(date);
 
   // Get the current date using dayjs
