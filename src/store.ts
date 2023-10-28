@@ -1,6 +1,6 @@
 import { IChat } from "@/types/interfaces";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 interface ChatState {
   activeChatUsername?: string;
