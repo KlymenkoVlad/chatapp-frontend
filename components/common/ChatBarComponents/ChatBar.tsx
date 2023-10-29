@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Chat from "./Chat";
-import axios from "axios"; // Import Axios for making HTTP requests
+import axios from "axios";
 import Cookies from "js-cookie";
 import { baseUrl } from "@/utils/baseUrl";
 import { useChatStore } from "@/src/store";
@@ -14,12 +14,11 @@ const LoadingChat = () => {
       <div className="animate-pulse flex space-x-4">
         <div className="rounded-full bg-slate-300 h-10 w-10"></div>
         <div className="flex-1 space-y-6 py-1">
-          <div className="h-2 bg-slate-300 rounded"></div>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="h-2 bg-slate-300 rounded col-span-2"></div>
+            <div className="h-2 bg-slate-300 rounded col-span-1"></div>
+          </div>
           <div className="space-y-3">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="h-2 bg-slate-300 rounded col-span-2"></div>
-              <div className="h-2 bg-slate-300 rounded col-span-1"></div>
-            </div>
             <div className="h-2 bg-slate-300 rounded"></div>
           </div>
         </div>
@@ -29,15 +28,12 @@ const LoadingChat = () => {
 };
 
 const ChatBar = () => {
-  //Get Chat from zustand
   const ChatsStore = useChatStore((state) => state.chats);
   const token = Cookies.get("token");
 
-  // Need to use to prevent error with rehydration
   const [chats, setChats] = useState<IChat[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Need to use to prevent error with rehydration
   useEffect(() => {
     setChats(ChatsStore as IChat[]);
   }, [ChatsStore]);

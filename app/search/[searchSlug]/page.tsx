@@ -65,7 +65,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <>
       <div className="text-center mx-3">
-        <h1 className="text-3xl font-bold ms:mt-24 mt-16 mb-2">
+        <h1 className="text-3xl font-bold ms:mt-24 mt-16 mb-8">
           {users
             ? "That's all we could find on your request "
             : "We can`t find anything by your request "}
