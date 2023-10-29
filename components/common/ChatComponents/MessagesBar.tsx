@@ -22,8 +22,6 @@ const MessageBar = () => {
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | undefined>(
     undefined
   );
-  const [connectedUsers, setConnectedUsers] = useState([]);
-  // console.log(connectedUsers);
 
   const { chatSlug: activeChatId } = useParams();
   const router = useRouter();
@@ -31,8 +29,6 @@ const MessageBar = () => {
   const activeChatUsername = useChatStore((state) => state.activeChatUsername);
   const userId = useChatStore((state) => state.userId);
   const messageEdit = useMessageStore((state) => state.messageEdit);
-
-  // console.log(messages);
 
   const socket = useRef<Socket | null>();
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -260,7 +256,7 @@ const MessageBar = () => {
           <button
             type="button"
             onClick={() => router.push("/")}
-            className="mr-1 ms:mr-5 h-[40px] w-[40px] inline-flex justify-center items-center md:hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 "
+            className="mr-2 ms:mr-5 h-[40px] w-[40px] inline-flex justify-center items-center md:hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 "
           >
             <MdArrowBack className="text-2xl" />
           </button>
@@ -277,9 +273,13 @@ const MessageBar = () => {
             </div>
           ) : (
             <div className="flex items-center">
-              <div className="w-10 h-10 bg-gray-400 rounded-full mr-1 ms:mr-5"></div>
+              <img
+                src="/blank-profile-icon.webp"
+                className="w-10 h-10 rounded-full mr-1 ms:mr-5 animate-pulse"
+                alt="user photo"
+              />
 
-              <p>Loading...</p>
+              <div className="animate-pulse h-2 w-14 bg-slate-300 rounded "></div>
             </div>
           )}
         </div>

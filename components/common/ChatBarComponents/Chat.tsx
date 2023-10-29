@@ -10,22 +10,29 @@ import Link from "next/link";
 
 const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
   return (
-    <div className="transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-105 duration-300 max-w-[700px] min-w-[320px] w-full  mx-auto bg-white shadow-md rounded-md mt-4 mb-2 hover:bg-slate-100 ">
+    <div className="transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-105 duration-300 max-w-[700px] min-w-[320px] w-full mx-auto bg-white shadow-md rounded-md mt-4 mb-2 hover:bg-slate-100 ">
       <Link href={`/chat/${messagesWith}`} shallow={true}>
         <div
           className="p-4 cursor-pointer"
           onClick={() => {
-            // useChatStore.setState({ activeChatId: messagesWith });
             useChatStore.setState({ activeChatUsername: user.username });
           }}
         >
           <div className="flex items-center space-x-3">
             <div className="flex-shrink-0">
-              <img
-                src={user.mainPicture}
-                alt={user.username}
-                className="w-10 h-10 rounded-full"
-              />
+              {user.mainPicture ? (
+                <img
+                  className="w-10 h-10 rounded-full"
+                  src={user.mainPicture}
+                  alt="user photo"
+                />
+              ) : (
+                <img
+                  src="/blank-profile-icon.webp"
+                  className="w-12 h-12 rounded-full"
+                  alt="user photo"
+                />
+              )}
             </div>
             <div className="flex-1">
               <p className="font-semibold">

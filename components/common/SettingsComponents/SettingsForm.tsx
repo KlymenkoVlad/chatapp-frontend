@@ -2,17 +2,13 @@
 
 import * as Yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { useEffect, useState } from "react";
-import Link from "next/link";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { baseUrl } from "@/utils/baseUrl";
-import { useChatStore } from "@/src/store";
 import PreviewImage from "@/components/ClientSidePages/Signup/components/PreviewImage";
 import type { IUser } from "@/types/interfaces";
-import { headers } from "next/headers";
 
 const SignupSchema = Yup.object().shape({
   mainPicture: Yup.mixed().notRequired(),
