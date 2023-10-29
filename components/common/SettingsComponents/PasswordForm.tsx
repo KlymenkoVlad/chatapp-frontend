@@ -34,7 +34,7 @@ export default function PasswordForm({ user }: { user: IUser }) {
   const router = useRouter();
 
   return (
-    <div className={` flex items-center justify-center `}>
+    <div className="flex items-center justify-center mb-4">
       <div className="w-[400px]  p-4 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold text-gray-800">
           Edit your password
