@@ -8,6 +8,7 @@ import { IUser } from "@/types/interfaces";
 import { tokenCheckClient } from "@/utils/authorizationCheck";
 import { redirect } from "next/navigation";
 import ButtonReturnSearchClient from "@/components/common/SearchComponents/ButtonReturnSearchClient";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Search",
@@ -82,21 +83,29 @@ export default async function Page({ params }: PageProps) {
             >
               <div className="p-3">
                 <div className="flex items-center justify-between mb-2">
-                  <a href="#">
-                    <img
-                      className="w-10 h-10 rounded-full"
+                  {user.mainPicture ? (
+                    <Image
+                      className="w-12 h-12 rounded-full"
                       src={user.mainPicture}
-                      alt={user.username}
+                      alt="user photo"
+                      width={50}
+                      height={50}
                     />
-                  </a>
+                  ) : (
+                    <Image
+                      src="/blank-profile-icon.webp"
+                      className="w-12 h-12 rounded-full"
+                      alt="user photo"
+                      width={50}
+                      height={50}
+                    />
+                  )}
                   <div>
-                    <ButtonSearchClient user={user} />
+                    <ButtonSearchClient token={token} user={user} />
                   </div>
                 </div>
                 <p className="text-base font-semibold leading-none text-gray-900 ">
-                  <a href="#">
-                    {`${user.name} ${user.lastname ? user.lastname : ""}`}
-                  </a>
+                  {`${user.name} ${user.lastname ? user.lastname : ""}`}
                 </p>
                 <p className="mb-3 text-sm font-normal">@{user.username}</p>
                 {/* <p className="mb-4 text-sm">TODO: Implement user description</p> */}

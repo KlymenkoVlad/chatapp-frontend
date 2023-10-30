@@ -8,6 +8,7 @@ import { IUser } from "@/types/interfaces";
 import { baseUrl } from "@/utils/baseUrl";
 import { ImSpinner2 } from "react-icons/im";
 import { useChatStore } from "@/src/store";
+import Image from "next/image";
 
 async function getData(token?: string) {
   try {
@@ -65,10 +66,12 @@ const ProfileMenu = () => {
   return (
     <div>
       {loading ? (
-        <img
+        <Image
           src="/blank-profile-icon.webp"
           className="w-12 h-12 rounded-full animate-pulse"
           alt="user photo"
+          width={50}
+          height={50}
         />
       ) : (
         user && (
@@ -81,16 +84,20 @@ const ProfileMenu = () => {
               type="button"
             >
               {user.mainPicture ? (
-                <img
-                  className="w-10 h-10 rounded-full"
+                <Image
+                  className="w-12 h-12 rounded-full"
                   src={user.mainPicture}
                   alt="user photo"
+                  width={50}
+                  height={50}
                 />
               ) : (
-                <img
+                <Image
                   src="/blank-profile-icon.webp"
                   className="w-12 h-12 rounded-full"
                   alt="user photo"
+                  width={50}
+                  height={50}
                 />
               )}
             </button>

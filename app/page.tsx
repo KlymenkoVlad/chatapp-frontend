@@ -1,6 +1,6 @@
 import { tokenCheckClient } from "@/utils/authorizationCheck";
 import ChatBar from "@/components/common/ChatBarComponents/ChatBar";
-import MessagesBar from "@/components/common/ChatComponents/MessagesBar";
+import MessagesBar from "@/components/common/MessageBarComponents/MessagesBar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
