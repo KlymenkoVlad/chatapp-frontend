@@ -11,7 +11,8 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { MdArrowBack, MdCancel, MdSend } from "react-icons/md";
-
+import Cookies from "js-cookie";
+import Image from "next/image";
 const MessageBar = () => {
   const [receiverUser, setReceiverUser] = useState<undefined | IUser>(
     undefined
@@ -22,6 +23,7 @@ const MessageBar = () => {
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | undefined>(
     undefined
   );
+  const token = Cookies.get("token");
 
   const { chatSlug: activeChatId } = useParams();
   const router = useRouter();
@@ -36,7 +38,10 @@ const MessageBar = () => {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const { data } = await axios.get(`${baseUrl}/api/user/${activeChatId}`);
+        const { data } = await axios.get(
+          `${baseUrl}/api/user/${activeChatId}`,
+          { headers: { Authorization: token } }
+        );
         setReceiverUser(data);
         console.log(data);
       } catch (error) {
@@ -263,18 +268,32 @@ const MessageBar = () => {
 
           {receiverUser ? (
             <div className="flex items-center">
-              <img
-                src={receiverUser.mainPicture}
-                alt={receiverUser.username}
-                className="w-10 h-10 rounded-full mr-1 ms:mr-5"
-              />
+              {receiverUser.mainPicture ? (
+                <Image
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 rounded-full mr-1 ms:mr-5"
+                  src={receiverUser.mainPicture}
+                  alt="user photo"
+                />
+              ) : (
+                <Image
+                  width={40}
+                  height={40}
+                  src="/blank-profile-icon.webp"
+                  className="w-10 h-10 rounded-full mr-1 ms:mr-5"
+                  alt="user photo"
+                />
+              )}
 
               <p className=" font-bold">{receiverUser.name}</p>
             </div>
           ) : (
             <div className="flex items-center">
-              <img
+              <Image
                 src="/blank-profile-icon.webp"
+                width={40}
+                height={40}
                 className="w-10 h-10 rounded-full mr-1 ms:mr-5 animate-pulse"
                 alt="user photo"
               />

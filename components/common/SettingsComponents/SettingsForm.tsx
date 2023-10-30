@@ -93,6 +93,8 @@ export default function SettingsForm({ user }: { user: IUser }) {
                 resetForm();
 
                 console.error(error);
+              } finally {
+                resetForm();
               }
             };
 

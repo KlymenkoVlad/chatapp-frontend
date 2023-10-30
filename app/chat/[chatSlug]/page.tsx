@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import MessageBar from "@/components/common/ChatComponents/MessagesBar";
+import MessageBar from "@/components/common/MessageBarComponents/MessagesBar";
 import ChatBar from "@/components/common/ChatBarComponents/ChatBar";
 import { tokenCheckClient } from "@/utils/authorizationCheck";
 

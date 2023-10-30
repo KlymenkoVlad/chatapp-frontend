@@ -21,13 +21,17 @@ const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
           <div className="flex items-center space-x-3">
             <div className="flex-shrink-0">
               {user.mainPicture ? (
-                <img
+                <Image
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-full"
                   src={user.mainPicture}
                   alt="user photo"
                 />
               ) : (
-                <img
+                <Image
+                  width={40}
+                  height={40}
                   src="/blank-profile-icon.webp"
                   className="w-12 h-12 rounded-full"
                   alt="user photo"

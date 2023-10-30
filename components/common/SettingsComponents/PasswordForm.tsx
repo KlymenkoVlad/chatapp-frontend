@@ -79,7 +79,7 @@ export default function PasswordForm({ user }: { user: IUser }) {
                 console.error(error);
               } finally {
                 toast.dismiss();
-                // resetForm();
+                resetForm();
               }
             };
 
