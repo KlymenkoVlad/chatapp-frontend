@@ -74,7 +74,7 @@ export default function SettingsForm({ user }: { user: IUser }) {
                     { ...values, mainPicture: mainImg },
                     { headers: { Authorization: token } }
                   )
-                  .catch(function (error) {
+                  .catch((error) => {
                     if (error.response) {
                       toast.dismiss();
                       toast.error(error.response.data.error);

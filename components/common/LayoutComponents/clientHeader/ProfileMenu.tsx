@@ -9,6 +9,7 @@ import { baseUrl } from "@/utils/baseUrl";
 import { ImSpinner2 } from "react-icons/im";
 import { useChatStore } from "@/src/store";
 import Image from "next/image";
+import { toast } from "sonner";
 
 async function getData(token?: string) {
   try {
@@ -130,14 +131,16 @@ const ProfileMenu = () => {
                     Settings
                   </Link>
                 </li>
-                <li className="block px-4 py-2 hover:bg-gray-100 ">
+                <li className="block px-4 py-2 hover:bg-gray-100">
                   <button
                     onClick={() => {
                       Cookies.remove("token");
                       useChatStore.setState({ userId: "", chats: [] });
                       setDropDownActive(false);
+                      toast.success("Logged out successfully");
                       router.push("/login");
                     }}
+                    className="w-full text-left"
                   >
                     Sign out
                   </button>

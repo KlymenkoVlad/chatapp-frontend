@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -15,6 +15,7 @@ const SignupSchema = Yup.object().shape({
   mainPicture: Yup.mixed(),
   username: Yup.string()
     .min(2, "Atleast 2 characters")
+    .matches(/^\S+$/, "Username cannot contain empty spaces")
     .required("Username is required"),
   name: Yup.string().notRequired().min(2, "Atleast 2 characters"),
   lastname: Yup.string().notRequired().min(2, "Atleast 2 characters"),
@@ -31,7 +32,7 @@ export default function Signup() {
   const router = useRouter();
 
   return (
-    <div className={`min-h-screen flex items-center justify-center `}>
+    <div className={`min-h-screen flex items-center justify-center my-2`}>
       <div className="max-w-md w-full p-4 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Sign Up</h2>
         <Formik
@@ -47,6 +48,7 @@ export default function Signup() {
           validationSchema={SignupSchema}
           onSubmit={(values, { setSubmitting }) => {
             const dataSubmit = async () => {
+              toast.loading("Wait, we are creating your account");
               const imageLoaded = async () => {
                 if (values.mainPicture instanceof File) {
                   const formData = new FormData();
@@ -72,25 +74,33 @@ export default function Signup() {
                 mainPicture: mainImg ? mainImg : undefined,
               };
 
-              // console.log(body);
-              const res = await axios.post(`${baseUrl}/api/signup`, body);
-              Cookies.set("token", res.data.token);
+              const res = await axios
+                .post(`${baseUrl}/api/signup`, body)
+                .catch((error) => {
+                  if (error) {
+                    toast.dismiss();
+                    toast.error(error.response.data.error);
+                    setSubmitting(false);
+
+                    throw new AxiosError(error.response.data.error);
+                  }
+                });
+              Cookies.set("token", res?.data.token);
 
               const { data } = await axios.get(`${baseUrl}/api/login`, {
-                headers: { Authorization: res.data.token },
+                headers: { Authorization: res?.data.token },
               });
 
               useChatStore.setState({ userId: data._id });
+
+              toast.dismiss();
+              toast.success("Your account has been created");
 
               router.push("/");
               setSubmitting(false);
             };
 
-            toast.promise(dataSubmit(), {
-              loading: "Wait, we are creating your account",
-              success: <b>Welcome, {values.username}</b>,
-              error: <b>Oh, something is went very-very wrong</b>,
-            });
+            dataSubmit();
           }}
         >
           {({ isSubmitting, setFieldValue, values, errors }) => (

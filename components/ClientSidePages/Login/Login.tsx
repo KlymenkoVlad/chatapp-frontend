@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -32,27 +32,35 @@ export default function Login() {
           validationSchema={LoginSchema}
           onSubmit={(values, { setSubmitting }) => {
             const dataSubmit = async () => {
-              const res = await axios.post(`${baseUrl}/api/login`, values);
+              toast.loading("Wait, we are logging you in");
+              const res = await axios
+                .post(`${baseUrl}/api/login`, values)
+                .catch((error) => {
+                  if (error) {
+                    toast.dismiss();
+                    toast.error(error.response.data.error);
+                    setSubmitting(false);
 
-              // console.log(res.data.token);
+                    throw new AxiosError(error.response.data.error);
+                  }
+                });
 
-              Cookies.set("token", res.data.token);
+              Cookies.set("token", res?.data.token);
 
               const { data } = await axios.get(`${baseUrl}/api/login`, {
-                headers: { Authorization: res.data.token },
+                headers: { Authorization: res?.data.token },
               });
 
               useChatStore.setState({ userId: data._id });
 
-              router.push("/");
+              toast.dismiss();
+              toast.success("Logged in successfully");
+
               setSubmitting(false);
+              router.push("/");
             };
 
-            toast.promise(dataSubmit(), {
-              loading: "Wait, we are trying to find your account",
-              success: <b>Welcome back!</b>,
-              error: <b>Oh, something is went very-very wrong</b>,
-            });
+            dataSubmit();
           }}
         >
           {({ isSubmitting }) => (

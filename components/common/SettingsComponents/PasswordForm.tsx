@@ -61,7 +61,7 @@ export default function PasswordForm({ user }: { user: IUser }) {
                     { oldPassword, newPassword },
                     { headers: { Authorization: token } }
                   )
-                  .catch(function (error) {
+                  .catch((error) => {
                     if (error.response) {
                       toast.dismiss();
                       toast.error(error.response.data.error);

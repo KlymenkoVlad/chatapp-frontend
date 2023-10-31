@@ -8,6 +8,7 @@ import { baseUrl } from "@/utils/baseUrl";
 import { useChatStore } from "@/src/store";
 import { IUser } from "@/types/interfaces";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { toast } from "sonner";
 
 const handleStartTalk = async (
   userIdReceiver: string,
@@ -58,6 +59,7 @@ const ButtonSearchClient = ({ user, token }: ButtonSearchClientProps) => {
       type="button"
       onClick={() => {
         handleStartTalk(user._id, userId, user.username, token);
+        toast.success("Start talking with " + user.username);
         router.push(`/chat/${user._id}`);
       }}
       className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1.5 "
