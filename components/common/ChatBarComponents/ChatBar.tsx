@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import { baseUrl } from "@/utils/baseUrl";
 import { useChatStore } from "@/src/store";
 import { IChat } from "@/types/interfaces";
+import Image from "next/image";
 
 const LoadingChat = () => {
   return (
@@ -67,9 +68,23 @@ const ChatBar = () => {
       ) : chats && chats.length > 0 ? (
         chats.map((chat) => <Chat key={chat.messagesWith} {...chat} />)
       ) : (
-        <p className="text-center font-bold text-2xl md:text-5xl">
-          No chats yet, you can find it above
-        </p>
+        <div className="flex flex-col items-center justify-center text-center">
+          <Image
+            width={150}
+            height={150}
+            src="/no-chat-error.png"
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className=" w-36 h-36"
+            alt=""
+          />
+          <p className=" text-center font-bold text-2xl md:text-5xl">
+            No messages yet.
+          </p>
+          <p className="">
+            No messages in your inbox, yet! Start chatting with people around
+            you. You can find them above
+          </p>
+        </div>
       )}
     </div>
   );

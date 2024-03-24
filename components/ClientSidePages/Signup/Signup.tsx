@@ -32,7 +32,7 @@ export default function Signup() {
   const router = useRouter();
 
   return (
-    <div className={`min-h-screen flex items-center justify-center my-2`}>
+    <div className={`my-4 h-fit flex items-center justify-center `}>
       <div className="max-w-md w-full p-4 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Sign Up</h2>
         <Formik
@@ -82,7 +82,7 @@ export default function Signup() {
                     toast.error(error.response.data.error);
                     setSubmitting(false);
 
-                    throw new AxiosError(error.response.data.error);
+                    console.error(error.response.data.error);
                   }
                 });
               Cookies.set("token", res?.data.token);
@@ -181,7 +181,7 @@ export default function Signup() {
                   className="bottom-8 left-0 text-gray-500 transition-transform duration-300 -translate-y-2 text-sm"
                   htmlFor="lastname"
                 >
-                  Your last name
+                  Your last name{" "}
                   <span className="text-red-500">(optional)</span>
                 </label>
                 <Field

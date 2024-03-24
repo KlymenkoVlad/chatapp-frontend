@@ -19,9 +19,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  /*Delete adding class below h-screen*/
+
   return (
     <html lang="en">
-      <body className={inter.className + " h-screen"}>
+      <body className={inter.className}>
         <Header />
         <Toaster richColors position="top-center" />
         {children}

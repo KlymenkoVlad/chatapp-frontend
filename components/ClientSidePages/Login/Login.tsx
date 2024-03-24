@@ -1,9 +1,9 @@
 "use client";
+
 import * as Yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -41,7 +41,7 @@ export default function Login() {
                     toast.error(error.response.data.error);
                     setSubmitting(false);
 
-                    throw new AxiosError(error.response.data.error);
+                    console.error(error.response.data.error);
                   }
                 });
 
@@ -63,7 +63,7 @@ export default function Login() {
             dataSubmit();
           }}
         >
-          {({ isSubmitting }) => (
+          {() => (
             <Form>
               <div className="bg-white mb-10">
                 <label
