@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Chat from "./Chat";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -8,6 +8,7 @@ import { baseUrl } from "@/utils/baseUrl";
 import { useChatStore } from "@/src/store";
 import { IChat } from "@/types/interfaces";
 import Image from "next/image";
+import { Socket, io } from "socket.io-client";
 
 const LoadingChat = () => {
   return (
@@ -31,6 +32,8 @@ const LoadingChat = () => {
 const ChatBar = () => {
   const ChatsStore = useChatStore((state) => state.chats);
   const token = Cookies.get("token");
+  const socket = useRef<Socket | null>();
+  const userId = useChatStore((state) => state.userId);
 
   const [chats, setChats] = useState<IChat[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,6 +41,23 @@ const ChatBar = () => {
   useEffect(() => {
     setChats(ChatsStore as IChat[]);
   }, [ChatsStore]);
+
+  useEffect(() => {
+    socket.current = io(baseUrl);
+    if (socket.current) {
+      socket.current.emit("join", { userId });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!socket.current) {
+      socket.current = io(baseUrl);
+    }
+
+    socket.current.on("newChatAccept", async (data) => {
+      setChats((prev) => [...prev, data]);
+    });
+  }, []);
 
   useEffect(() => {
     const fetchChats = async () => {
