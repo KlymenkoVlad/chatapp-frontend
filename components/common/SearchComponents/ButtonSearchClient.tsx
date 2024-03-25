@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import axios from "axios";
 import { redirect, useRouter } from "next/navigation";
 
@@ -9,38 +9,7 @@ import { useChatStore } from "@/src/store";
 import { IUser } from "@/types/interfaces";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { toast } from "sonner";
-
-const handleStartTalk = async (
-  userIdReceiver: string,
-  userId: string | undefined,
-  username: string,
-  token: RequestCookie
-) => {
-  if (!userId) {
-    console.error("no user id");
-  }
-
-  const { data } = await axios.post(
-    `${baseUrl}/api/chat`,
-    {
-      userId,
-      msgSendToUserId: userIdReceiver,
-    },
-    { headers: { Authorization: token.value } }
-  );
-
-  // Check if the chat entry already exists in the state
-  const chatExists = useChatStore
-    .getState()
-    .chats.some((chat) => chat.messagesWith === data.messagesWith);
-
-  if (!chatExists && typeof data.message !== "string") {
-    const updatedChats = [...useChatStore.getState().chats, data];
-    useChatStore.setState({ chats: updatedChats });
-  }
-
-  useChatStore.setState({ activeChatUsername: username });
-};
+import { Socket, io } from "socket.io-client";
 
 interface ButtonSearchClientProps {
   user: IUser;
@@ -53,6 +22,44 @@ const ButtonSearchClient = ({ user, token }: ButtonSearchClientProps) => {
   }
   const router = useRouter();
   const userId = useChatStore((state) => state.userId);
+  const socket = useRef<Socket | null>();
+
+  const handleStartTalk = async (
+    userIdReceiver: string,
+    userId: string | undefined,
+    username: string,
+    token: RequestCookie
+  ) => {
+    if (!socket.current) {
+      socket.current = io(baseUrl);
+    }
+
+    const { data, status } = await axios.post(
+      `${baseUrl}/api/chat`,
+      {
+        userId,
+        msgSendToUserId: userIdReceiver,
+      },
+      { headers: { Authorization: token.value } }
+    );
+
+    // Check if the chat entry already exists in the state
+    const chatExists = useChatStore
+      .getState()
+      .chats.some((chat) => chat.messagesWith === data.messagesWith);
+
+    //TODO Check if all works properly
+    if (!chatExists && status === 201) {
+      socket.current.emit("start-talk", { userIdReceiver, userId });
+      const updatedChats = [...useChatStore.getState().chats, data];
+      useChatStore.setState({ chats: updatedChats });
+      toast.success("Start talking with " + user.username);
+    } else {
+      toast.success("Here's your chat with " + user.username);
+    }
+
+    useChatStore.setState({ activeChatUsername: username });
+  };
 
   return (
     <button
