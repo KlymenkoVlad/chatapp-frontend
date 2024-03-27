@@ -23,6 +23,9 @@ const MessageBar = () => {
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | undefined>(
     undefined
   );
+
+  const [dropDownActive, setDropDownActive] = useState(false);
+
   const token = Cookies.get("token");
 
   const { chatSlug: activeChatId } = useParams();
@@ -31,6 +34,7 @@ const MessageBar = () => {
   const activeChatUsername = useChatStore((state) => state.activeChatUsername);
   const userId = useChatStore((state) => state.userId);
   const messageEdit = useMessageStore((state) => state.messageEdit);
+  const dropDownRef = useRef<any>(null);
 
   const socket = useRef<Socket | null>();
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -186,6 +190,21 @@ const MessageBar = () => {
     };
   }, [activeChatId]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
+        setDropDownActive(false);
+        console.log("dafsd");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleTyping = () => {
     if (!socket.current) return;
 
@@ -256,7 +275,7 @@ const MessageBar = () => {
 
   const MessageNav = () => {
     return (
-      <div className="p-3 flex items-center justify-between font-bold">
+      <div className="p-3 flex items-center justify-between font-bold relative">
         <div className="flex">
           <button
             type="button"
@@ -267,12 +286,13 @@ const MessageBar = () => {
           </button>
 
           {receiverUser ? (
-            <div className="flex items-center">
+            <div className="flex items-center ">
               {receiverUser.mainPicture ? (
                 <Image
                   width={40}
                   height={40}
-                  className="w-12 h-12 rounded-full mr-1 ms:mr-5"
+                  onClick={() => setDropDownActive(!dropDownActive)}
+                  className="cursor-pointer w-12 h-12 rounded-full mr-1 ms:mr-5"
                   src={receiverUser.mainPicture}
                   alt="user photo"
                 />
@@ -280,17 +300,55 @@ const MessageBar = () => {
                 <Image
                   width={40}
                   height={40}
+                  onClick={() => setDropDownActive(!dropDownActive)}
                   src="/blank-profile-icon.webp"
-                  className="w-12 h-12 rounded-full mr-1 ms:mr-5"
+                  className="cursor-pointer w-12 h-12 rounded-full mr-1 ms:mr-5"
                   alt="user photo"
                 />
               )}
+
+              <div
+                ref={dropDownRef}
+                id="dropdownAvatar"
+                className={`z-10 top-16 w-fit max-w-[400px] font-normal ${
+                  dropDownActive ? "opacity-100" : "opacity-0"
+                } transition-opacity ease-in-out delay-150 duration-1000 ${
+                  dropDownActive ? "absolute" : "hidden"
+                } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 `}
+              >
+                <div className=" px-4 py-3 text-sm text-gray-900 flex flex-col ">
+                  {receiverUser.name && (
+                    <p>
+                      <span className="font-bold">Name:</span>{" "}
+                      {receiverUser?.name}
+                    </p>
+                  )}
+                  {receiverUser.lastname && (
+                    <p>
+                      <span className="font-bold">Lastname:</span>{" "}
+                      {receiverUser?.lastname}
+                    </p>
+                  )}
+                  <p>
+                    <span className="font-bold">Email:</span>{" "}
+                    <a
+                      className="hover:text-blue-700 text-blue-500 transition-colors"
+                      href={`mailto:${receiverUser?.email}`}
+                    >
+                      {receiverUser?.email}
+                    </a>
+                  </p>
+                  <p>
+                    <span className="font-bold">Username:</span>{" "}
+                    {receiverUser?.username}
+                  </p>
+                </div>
+              </div>
 
               <div className="h-full">
                 <p className=" font-bold">{receiverUser.name}</p>
                 {userTyping && (
                   <p className="font-semibold text-blue-700 ">
-                    {" "}
                     is typing <span className="animate-ping">.</span>
                     <span
                       style={{ animationDelay: "0.3s" }}

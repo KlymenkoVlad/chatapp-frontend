@@ -4,7 +4,11 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { BiSearch } from "react-icons/bi";
 import { toast } from "sonner";
-const Search = ({ smallSearch }: { smallSearch: boolean }) => {
+
+interface ISearchProps {
+  smallSearch?: boolean;
+}
+const Search = ({ smallSearch }: ISearchProps) => {
   const router = useRouter();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
