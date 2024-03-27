@@ -114,7 +114,7 @@ const ProfileMenu = () => {
             >
               <div className="px-4 py-3 text-sm text-gray-900 ">
                 <div>
-                  {user.name} {user?.lastname}
+                  Hi, {user.name} {user?.lastname}
                 </div>
                 <div className="font-medium truncate">{user.email}</div>
               </div>

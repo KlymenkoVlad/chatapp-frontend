@@ -53,9 +53,6 @@ const ButtonSearchClient = ({ user, token }: ButtonSearchClientProps) => {
       socket.current.emit("start-talk", { userIdReceiver, userId });
       const updatedChats = [...useChatStore.getState().chats, data];
       useChatStore.setState({ chats: updatedChats });
-      toast.success("Start talking with " + user.username);
-    } else {
-      toast.success("Here's your chat with " + user.username);
     }
 
     useChatStore.setState({ activeChatUsername: username });
@@ -66,7 +63,7 @@ const ButtonSearchClient = ({ user, token }: ButtonSearchClientProps) => {
       type="button"
       onClick={() => {
         handleStartTalk(user._id, userId, user.username, token);
-        toast.success("Start talking with " + user.username);
+        toast.success("Here's your chat with " + user.username);
         router.push(`/chat/${user._id}`);
       }}
       className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1.5 "

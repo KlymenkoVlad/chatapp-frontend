@@ -50,12 +50,12 @@ const Message = ({
     >
       <div>
         <div
-          className={`p-3 rounded-r-lg rounded-bl-lg ${
+          className={`p-3  ${
             message.sender === userId
               ? messageEdit === message._id
-                ? "bg-blue-900 text-white"
-                : "bg-blue-600 text-white"
-              : "bg-gray-300"
+                ? "bg-blue-900 text-white rounded-l-lg rounded-br-lg"
+                : "bg-blue-600 text-white rounded-l-lg rounded-br-lg"
+              : "bg-gray-300 rounded-r-lg rounded-bl-lg"
           }`}
         >
           <p className="text-sm break-all">{message.msg}</p>
