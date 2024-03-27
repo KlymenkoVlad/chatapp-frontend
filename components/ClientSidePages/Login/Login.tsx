@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { baseUrl } from "@/utils/baseUrl";
 import { useChatStore } from "@/src/store";
+import Image from "next/image";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -23,7 +24,19 @@ export default function Login() {
   return (
     <div className={`min-h-screen flex items-center justify-center `}>
       <div className="max-w-md w-full p-4 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Log in</h2>
+        <Image
+          src="/app-logo.png"
+          width={80}
+          height={80}
+          alt="logo"
+          className="mx-auto mb-5"
+        />
+        <h1 className="text-3xl font-semibold text-gray-800 mb-2 text-center">
+          Messenger
+        </h1>
+        <h2 className="text-xl text-gray-800 mb-4 text-center">
+          Below you can login
+        </h2>
         <Formik
           initialValues={{
             email: "",

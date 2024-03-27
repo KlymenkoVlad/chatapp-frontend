@@ -23,6 +23,9 @@ const MessageBar = () => {
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | undefined>(
     undefined
   );
+
+  const [dropDownActive, setDropDownActive] = useState(false);
+
   const token = Cookies.get("token");
 
   const { chatSlug: activeChatId } = useParams();
@@ -31,6 +34,7 @@ const MessageBar = () => {
   const activeChatUsername = useChatStore((state) => state.activeChatUsername);
   const userId = useChatStore((state) => state.userId);
   const messageEdit = useMessageStore((state) => state.messageEdit);
+  const dropDownRef = useRef<any>(null);
 
   const socket = useRef<Socket | null>();
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -186,6 +190,21 @@ const MessageBar = () => {
     };
   }, [activeChatId]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
+        setDropDownActive(false);
+        console.log("dafsd");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleTyping = () => {
     if (!socket.current) return;
 
@@ -256,23 +275,24 @@ const MessageBar = () => {
 
   const MessageNav = () => {
     return (
-      <div className="p-3 flex items-center justify-between font-bold">
+      <div className="p-3 flex items-center justify-between font-bold relative">
         <div className="flex">
           <button
             type="button"
             onClick={() => router.push("/")}
-            className="mr-2 ms:mr-5 h-[40px] w-[40px] inline-flex justify-center items-center md:hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 "
+            className="mr-2 ms:mr-5 h-[40px] w-[40px] inline-flex justify-center items-center  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 "
           >
             <MdArrowBack className="text-2xl" />
           </button>
 
           {receiverUser ? (
-            <div className="flex items-center">
+            <div className="flex items-center ">
               {receiverUser.mainPicture ? (
                 <Image
                   width={40}
                   height={40}
-                  className="w-10 h-10 rounded-full mr-1 ms:mr-5"
+                  onClick={() => setDropDownActive(!dropDownActive)}
+                  className="cursor-pointer w-12 h-12 rounded-full mr-1 ms:mr-5"
                   src={receiverUser.mainPicture}
                   alt="user photo"
                 />
@@ -280,13 +300,71 @@ const MessageBar = () => {
                 <Image
                   width={40}
                   height={40}
+                  onClick={() => setDropDownActive(!dropDownActive)}
                   src="/blank-profile-icon.webp"
-                  className="w-10 h-10 rounded-full mr-1 ms:mr-5"
+                  className="cursor-pointer w-12 h-12 rounded-full mr-1 ms:mr-5"
                   alt="user photo"
                 />
               )}
 
-              <p className=" font-bold">{receiverUser.name}</p>
+              <div
+                ref={dropDownRef}
+                id="dropdownAvatar"
+                className={`z-10 top-16 w-fit max-w-[400px] font-normal ${
+                  dropDownActive ? "opacity-100" : "opacity-0"
+                } transition-opacity ease-in-out delay-150 duration-1000 ${
+                  dropDownActive ? "absolute" : "hidden"
+                } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 `}
+              >
+                <div className=" px-4 py-3 text-sm text-gray-900 flex flex-col ">
+                  {receiverUser.name && (
+                    <p>
+                      <span className="font-bold">Name:</span>{" "}
+                      {receiverUser?.name}
+                    </p>
+                  )}
+                  {receiverUser.lastname && (
+                    <p>
+                      <span className="font-bold">Lastname:</span>{" "}
+                      {receiverUser?.lastname}
+                    </p>
+                  )}
+                  <p>
+                    <span className="font-bold">Email:</span>{" "}
+                    <a
+                      className="hover:text-blue-700 text-blue-500 transition-colors"
+                      href={`mailto:${receiverUser?.email}`}
+                    >
+                      {receiverUser?.email}
+                    </a>
+                  </p>
+                  <p>
+                    <span className="font-bold">Username:</span>{" "}
+                    {receiverUser?.username}
+                  </p>
+                </div>
+              </div>
+
+              <div className="h-full">
+                <p className=" font-bold">{receiverUser.name}</p>
+                {userTyping && (
+                  <p className="font-semibold text-blue-700 ">
+                    is typing <span className="animate-ping">.</span>
+                    <span
+                      style={{ animationDelay: "0.3s" }}
+                      className="animate-ping "
+                    >
+                      .
+                    </span>
+                    <span
+                      style={{ animationDelay: "0.6s" }}
+                      className="animate-ping"
+                    >
+                      .
+                    </span>
+                  </p>
+                )}
+              </div>
             </div>
           ) : (
             <div className="flex items-center">
@@ -294,7 +372,7 @@ const MessageBar = () => {
                 src="/blank-profile-icon.webp"
                 width={40}
                 height={40}
-                className="w-10 h-10 rounded-full mr-1 ms:mr-5 animate-pulse"
+                className="w-12 h-12 rounded-full mr-1 ms:mr-5 animate-pulse"
                 alt="user photo"
               />
 
@@ -332,58 +410,55 @@ const MessageBar = () => {
   };
 
   return (
-    <div
-      className={`md:ml-4 w-full min-h-[70vh] mx-auto bg-white shadow-md rounded-md relative `}
-    >
+    <div className="md:ml-4 flex flex-col h-screen w-full">
       <MessageNav />
-      <div className="w-full h-[1px] bg-gray-200 mb-4"></div>
-      <div
-        className="overflow-y-auto h-[70vh] mb-24 px-4"
-        ref={messagesContainerRef}
-      >
-        <div className="space-y-2">
+      <div className="flex-grow border overflow-hidden">
+        <div
+          className="p-2 h-[30vh] exralarge:h-[80vh] large:h-[74vh] tall:h-[68vh] mid:h-[58vh] small:h-[38vh] overflow-y-auto"
+          ref={messagesContainerRef}
+        >
           {messages &&
             messages.length > 0 &&
             messages.map((message, index) => (
-              <Message
-                key={index}
-                userId={userId}
-                message={message}
-                setMessageInput={setMessageInput}
-              />
+              <div className="mx-2 cursor-pointer">
+                <Message
+                  key={index}
+                  userId={userId}
+                  message={message}
+                  setMessageInput={setMessageInput}
+                />
+              </div>
             ))}
         </div>
-      </div>
-
-      <div className="absolute w-full bottom-4 left-0 mx-2 will-change-auto bg-white ">
-        {userTyping && (
-          <p className="font-semibold">{userTyping} is typing...</p>
-        )}
-
-        <form onSubmit={(e) => handleSendMessage(e)}>
-          <label htmlFor="chat" className="sr-only">
-            Your message
-          </label>
-          <div className="flex items-center px-3 py-2 rounded-lg">
-            <textarea
-              id="chat"
-              rows={2}
-              value={messageInput}
-              onInput={handleTyping}
-              onBlur={handleStopTyping}
-              onChange={(e) => setMessageInput(e.target.value)}
-              className={`max-h-16 block mx-2 p-2.5 w-full text-sm bg-white text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500`}
-              placeholder="Your message..."
-            ></textarea>
-            <button
-              type="submit"
-              className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100"
-            >
-              <MdSend className="text-2xl" />
-              <span className="sr-only">Send message</span>
-            </button>
-          </div>
-        </form>
+        <div className=" bg-gray-100 p-2 h-[70vh] large:h-[20vh] tall:h-[30vh] mid:h-[42vh] small:h-[60vh]">
+          <form onSubmit={(e) => handleSendMessage(e)} className="h-full">
+            <label htmlFor="chat" className="sr-only">
+              Your message
+            </label>
+            <div className="flex items-center px-3 py-2 rounded-lg">
+              <textarea
+                id="chat"
+                rows={2}
+                value={messageInput}
+                onInput={handleTyping}
+                onBlur={handleStopTyping}
+                onChange={(e) => setMessageInput(e.target.value)}
+                className={`max-h-24 h-24 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+              disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
+              invalid:border-pink-500 invalid:text-pink-600
+              focus:invalid:border-pink-500 focus:invalid:ring-pink-500 focus:shadow-outline  block mx-2 p-2.5 w-full text-sm bg-white text-gray-900 rounded-lg border border-gray-300 `}
+                placeholder="Your message..."
+              ></textarea>
+              <button
+                type="submit"
+                className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100"
+              >
+                <MdSend className="text-2xl" />
+                <span className="sr-only">Send message</span>
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

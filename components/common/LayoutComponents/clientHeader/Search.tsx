@@ -3,8 +3,12 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 import { BiSearch } from "react-icons/bi";
+import { toast } from "sonner";
 
-const Search = () => {
+interface ISearchProps {
+  smallSearch?: boolean;
+}
+const Search = ({ smallSearch }: ISearchProps) => {
   const router = useRouter();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -23,7 +27,12 @@ const Search = () => {
         <input
           type="search"
           id="default-search"
-          className="h-12 sm:w-[400px] lg:w-[550px] focus:ring-0 shadow-md block p-4 pl-10 text-sm text-gray-900  border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+          className={`focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+          disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
+          invalid:border-pink-500 invalid:text-pink-600
+          focus:invalid:border-pink-500 focus:invalid:ring-pink-500 focus:shadow-outline  h-12 ${
+            smallSearch ? "sm:w-[320px]" : "sm:w-[400px] lg:w-[550px]"
+          }  shadow-md block p-4 pl-10 text-sm text-gray-900  border-gray-300 rounded-lg bg-gray-50   `}
           placeholder="Find your friends..."
           required
         />

@@ -167,7 +167,9 @@ export default function SettingsForm({ user }: { user: IUser }) {
                  focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
                   id="name"
                   name="name"
-                  placeholder={`current: ${user.name}`}
+                  placeholder={`current: ${
+                    user.name ? user.name : "not specified"
+                  }`}
                   type="text"
                 />
                 <ErrorMessage
@@ -191,7 +193,9 @@ export default function SettingsForm({ user }: { user: IUser }) {
                  focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
                   id="lastname"
                   name="lastname"
-                  placeholder={`current: ${user.lastname}`}
+                  placeholder={`current: ${
+                    user.lastname ? user.lastname : "not specified"
+                  }`}
                   type="text"
                 />
                 <ErrorMessage

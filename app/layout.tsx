@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Chat App",
   description:
-    "Really cool chat app, just for fun and learning, but you can use it",
+    "Chat app that makes you be sure, that every message is delivered to your friends",
 };
 
 export default function RootLayout({
@@ -19,15 +19,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  /*Delete adding class below h-screen*/
-
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header />
         <Toaster richColors position="top-center" />
         {children}
-        {/* <Footer /> */}
       </body>
     </html>
   );
