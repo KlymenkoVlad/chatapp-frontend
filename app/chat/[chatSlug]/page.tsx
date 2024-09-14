@@ -16,9 +16,9 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   tokenCheckClient();
   return (
-    <main className="max-w-full flex items-start ">
-      <div className="hidden md:block ml-3">
-        <div className="mb-10 flex items-end mx-auto p-2">
+    <main className="flex max-w-full items-start">
+      <div className="ml-3 hidden md:block">
+        <div className="mx-auto mb-10 flex items-end p-2">
           <Search smallSearch={true} />
         </div>
         <ChatBar />

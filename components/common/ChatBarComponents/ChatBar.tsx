@@ -12,16 +12,16 @@ import { Socket, io } from "socket.io-client";
 
 const LoadingChat = () => {
   return (
-    <div className="shadow rounded-md p-4 mt-4 mx-auto max-w-[700px] min-w-[320px] w-full">
-      <div className="animate-pulse flex space-x-4">
-        <div className="rounded-full bg-slate-300 h-10 w-10"></div>
+    <div className="mx-auto mt-4 w-full min-w-[320px] max-w-[700px] rounded-md p-4 shadow">
+      <div className="flex animate-pulse space-x-4">
+        <div className="h-10 w-10 rounded-full bg-slate-300"></div>
         <div className="flex-1 space-y-6 py-1">
           <div className="grid grid-cols-3 gap-4">
-            <div className="h-2 bg-slate-300 rounded col-span-2"></div>
-            <div className="h-2 bg-slate-300 rounded col-span-1"></div>
+            <div className="col-span-2 h-2 rounded bg-slate-300"></div>
+            <div className="col-span-1 h-2 rounded bg-slate-300"></div>
           </div>
           <div className="space-y-3">
-            <div className="h-2 bg-slate-300 rounded"></div>
+            <div className="h-2 rounded bg-slate-300"></div>
           </div>
         </div>
       </div>
@@ -94,10 +94,10 @@ const ChatBar = () => {
             height={150}
             src="/no-chat-error.png"
             sizes="(max-width: 768px) 100vw, 33vw"
-            className=" w-36 h-36"
+            className="h-36 w-36"
             alt=""
           />
-          <p className=" text-center font-bold text-2xl md:text-5xl">
+          <p className="text-center text-2xl font-bold md:text-5xl">
             No messages yet.
           </p>
           <p className="">

@@ -21,8 +21,8 @@ export const useChatStore = create(
     }),
     {
       name: "chat-storage", // name of the item in the storage (must be unique)
-    }
-  )
+    },
+  ),
 );
 
 export const useMessageStore = create<MessageStore>()((set) => ({

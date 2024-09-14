@@ -40,7 +40,7 @@ export default async function Page() {
   return (
     <div className="text-center">
       <ButtonReturnSearchClient />
-      <div className="flex flex-col lg:flex-row justify-center mx-5 text-left">
+      <div className="mx-5 flex flex-col justify-center text-left lg:flex-row">
         <SettingsForm user={user} />
         <PasswordForm user={user} />
       </div>

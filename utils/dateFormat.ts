@@ -20,8 +20,8 @@ const dateFormat = (date?: string) => {
   return isToday
     ? messageDate.format("HH:mm") // Today: Format as time
     : isSameWeek
-    ? messageDate.format("dddd") // In the current week: Format as day of the week
-    : messageDate.format("DD.MM.YYYY"); // Not in the current week: Format as full date
+      ? messageDate.format("dddd") // In the current week: Format as day of the week
+      : messageDate.format("DD.MM.YYYY"); // Not in the current week: Format as full date
 };
 
 export default dateFormat;

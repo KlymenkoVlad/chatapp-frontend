@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import axios from "axios";
 import { cookies } from "next/headers";
+import Image from "next/image";
 
 import { baseUrl } from "@/utils/baseUrl";
 import ButtonSearchClient from "@/components/common/SearchComponents/ButtonSearchClient";
 import { IUser } from "@/types/interfaces";
-import { tokenCheckClient } from "@/utils/authorizationCheck";
-import { redirect } from "next/navigation";
 import ButtonReturnSearchClient from "@/components/common/SearchComponents/ButtonReturnSearchClient";
-import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Search",
@@ -51,8 +48,6 @@ async function getData({
 }
 
 export default async function Page({ params }: PageProps) {
-  tokenCheckClient();
-
   const cookieStore = cookies();
   const token = cookieStore.get("token");
 
@@ -64,9 +59,9 @@ export default async function Page({ params }: PageProps) {
   //TODO: INSERT NAME
 
   return (
-    <>
-      <div className="text-center mx-3">
-        <h1 className="text-3xl font-bold ms:mt-24 mt-16 mb-8">
+    <main>
+      <div className="mx-3 text-center">
+        <h1 className="mb-8 mt-16 text-3xl font-bold ms:mt-24">
           {users
             ? "That's all we could find on your request "
             : "We can`t find anything by your request "}
@@ -74,18 +69,18 @@ export default async function Page({ params }: PageProps) {
         </h1>
         <ButtonReturnSearchClient />
       </div>
-      <div className="flex justify-around items-center gap-3 mx-14 mb-16 ms:mt-24 mt-16 flex-wrap">
+      <div className="mx-14 mb-16 mt-16 flex flex-wrap items-center justify-around gap-3 ms:mt-24">
         {users &&
           users.map((user) => (
             <div
               key={user._id}
-              className="inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-md  "
+              className="inline-block w-64 rounded-lg border border-gray-200 bg-white text-sm text-gray-500 shadow-md transition-opacity duration-300"
             >
               <div className="p-3">
-                <div className="flex items-center justify-between mb-2">
+                <div className="mb-2 flex items-center justify-between">
                   {user.mainPicture ? (
                     <Image
-                      className="w-12 h-12 rounded-full"
+                      className="h-12 w-12 rounded-full"
                       src={user.mainPicture}
                       alt="user photo"
                       width={50}
@@ -94,7 +89,7 @@ export default async function Page({ params }: PageProps) {
                   ) : (
                     <Image
                       src="/blank-profile-icon.webp"
-                      className="w-12 h-12 rounded-full"
+                      className="h-12 w-12 rounded-full"
                       alt="user photo"
                       width={50}
                       height={50}
@@ -104,7 +99,7 @@ export default async function Page({ params }: PageProps) {
                     <ButtonSearchClient token={token} user={user} />
                   </div>
                 </div>
-                <p className="text-base font-semibold leading-none text-gray-900 ">
+                <p className="text-base font-semibold leading-none text-gray-900">
                   {`${user.name} ${user.lastname ? user.lastname : ""}`}
                 </p>
                 <p className="mb-3 text-sm font-normal">@{user.username}</p>
@@ -113,6 +108,6 @@ export default async function Page({ params }: PageProps) {
             </div>
           ))}
       </div>
-    </>
+    </main>
   );
 }

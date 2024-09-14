@@ -10,10 +10,10 @@ import Link from "next/link";
 
 const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
   return (
-    <div className="transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-105 duration-300 max-w-[700px] min-w-[320px] w-full mx-auto bg-white shadow-md rounded-md mt-4 mb-2 hover:bg-slate-100 ">
+    <div className="mx-auto mb-2 mt-4 w-full min-w-[320px] max-w-[700px] rounded-md bg-white shadow-md transition delay-100 duration-300 ease-in-out hover:bg-slate-100">
       <Link href={`/chat/${messagesWith}`} shallow={true}>
         <div
-          className="p-4 cursor-pointer"
+          className="cursor-pointer p-4"
           onClick={() => {
             useChatStore.setState({ activeChatUsername: user.username });
           }}
@@ -24,7 +24,7 @@ const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
                 <Image
                   width={40}
                   height={40}
-                  className="w-10 h-10 rounded-full"
+                  className="h-10 w-10 rounded-full"
                   src={user.mainPicture}
                   alt="user photo"
                 />
@@ -33,7 +33,7 @@ const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
                   width={40}
                   height={40}
                   src="/blank-profile-icon.webp"
-                  className="w-12 h-12 rounded-full"
+                  className="h-12 w-12 rounded-full"
                   alt="user photo"
                 />
               )}
@@ -42,7 +42,7 @@ const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
               <p className="font-semibold">
                 {`${user.name} ${user.lastname ? user.lastname : ""}`}
               </p>
-              <p className="text-gray-500 text-sm">
+              <p className="text-sm text-gray-500">
                 Last message:{" "}
                 {lastMessage
                   ? truncateString(lastMessage, 20)
@@ -50,7 +50,7 @@ const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
               </p>
             </div>
             <div>
-              <p className="text-gray-500 text-sm">
+              <p className="text-sm text-gray-500">
                 {date && dateFormat(date)}
               </p>
             </div>

@@ -23,8 +23,8 @@ export default function SettingsForm({ user }: { user: IUser }) {
 
   return (
     <div className={`my-10 flex items-center justify-center lg:mr-10`}>
-      <div className="w-[400px] p-4 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+      <div className="w-[400px] rounded-lg bg-white p-4 shadow-lg">
+        <h2 className="mb-4 text-2xl font-semibold text-gray-800">
           Edit your profile
         </h2>
         <Formik
@@ -60,7 +60,7 @@ export default function SettingsForm({ user }: { user: IUser }) {
                     formData.append("upload_preset", "Messenger");
                     const resMain = await axios.post(
                       `https://api.cloudinary.com/v1_1/dw0j1mmbp/image/upload`,
-                      formData
+                      formData,
                     );
                     return resMain.data.secure_url as string;
                   } else return null;
@@ -72,7 +72,7 @@ export default function SettingsForm({ user }: { user: IUser }) {
                   .put(
                     `${baseUrl}/api/user`,
                     { ...values, mainPicture: mainImg },
-                    { headers: { Authorization: token } }
+                    { headers: { Authorization: token } },
                   )
                   .catch((error) => {
                     if (error.response) {
@@ -103,19 +103,15 @@ export default function SettingsForm({ user }: { user: IUser }) {
         >
           {({ isSubmitting, setFieldValue, values, errors }) => (
             <Form>
-              <div className="bg-white mb-10">
+              <div className="mb-10 bg-white">
                 <label
-                  className=" bottom-8 left-0 text-gray-500 transition-transform duration-300 -translate-y-2 text-sm"
+                  className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
                   htmlFor="username"
                 >
                   Your username
                 </label>
                 <Field
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-                focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-                invalid:border-pink-500 invalid:text-pink-600
-                focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
+                  className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
                   id="username"
                   name="username"
                   placeholder={`current: ${user.username}`}
@@ -128,19 +124,15 @@ export default function SettingsForm({ user }: { user: IUser }) {
                 />
               </div>
 
-              <div className="bg-white mb-10">
+              <div className="mb-10 bg-white">
                 <label
-                  className=" bottom-8 left-0 text-gray-500 transition-transform duration-300 -translate-y-2 text-sm"
+                  className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
                   htmlFor="email"
                 >
                   Your email
                 </label>
                 <Field
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-                focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-                invalid:border-pink-500 invalid:text-pink-600
-                focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
+                  className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
                   id="email"
                   name="email"
                   placeholder={`current: ${user.email}`}
@@ -153,18 +145,15 @@ export default function SettingsForm({ user }: { user: IUser }) {
                 />
               </div>
 
-              <div className="bg-white mb-10">
+              <div className="mb-10 bg-white">
                 <label
-                  className="bottom-8 left-0 text-gray-500 transition-transform duration-300 -translate-y-2 text-sm"
+                  className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
                   htmlFor="name"
                 >
                   Your name
                 </label>
                 <Field
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-                 invalid:border-pink-500 invalid:text-pink-600
-                 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
+                  className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
                   id="name"
                   name="name"
                   placeholder={`current: ${
@@ -179,18 +168,15 @@ export default function SettingsForm({ user }: { user: IUser }) {
                 />
               </div>
 
-              <div className="bg-white mb-10">
+              <div className="mb-10 bg-white">
                 <label
-                  className="bottom-8 left-0 text-gray-500 transition-transform duration-300 -translate-y-2 text-sm"
+                  className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
                   htmlFor="lastname"
                 >
                   Your last name
                 </label>
                 <Field
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-                 invalid:border-pink-500 invalid:text-pink-600
-                 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
+                  className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
                   id="lastname"
                   name="lastname"
                   placeholder={`current: ${
@@ -228,15 +214,15 @@ export default function SettingsForm({ user }: { user: IUser }) {
                 />
               </div> */}
 
-              <div className="bg-white mb-10">
+              <div className="mb-10 bg-white">
                 <label
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                   htmlFor="file_input"
                 >
                   Choose main picture of product
                 </label>
                 <input
-                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-sky-700 dark:border-sky-600 dark:placeholder-gray-400"
+                  className="block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-sky-600 dark:bg-sky-700 dark:text-gray-400 dark:placeholder-gray-400"
                   id="file_input"
                   accept="image/*"
                   name="mainPicture"
@@ -260,7 +246,7 @@ export default function SettingsForm({ user }: { user: IUser }) {
               <div className="mt-6">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white py-2 px-4 rounded-full w-full hover:bg-blue-600"
+                  className="w-full rounded-full bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
                 >
                   Save changes
                 </button>

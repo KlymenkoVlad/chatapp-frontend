@@ -43,7 +43,11 @@ const ProfileMenu = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        event.target.id !== "userPhoto"
+      ) {
         setDropDownActive(false);
       }
     };
@@ -69,7 +73,7 @@ const ProfileMenu = () => {
       {loading ? (
         <Image
           src="/blank-profile-icon.webp"
-          className="w-12 h-12 rounded-full animate-pulse"
+          className="h-12 w-12 animate-pulse rounded-full"
           alt="user photo"
           width={50}
           height={50}
@@ -81,52 +85,47 @@ const ProfileMenu = () => {
               id="dropdownUserAvatarButton"
               data-dropdown-toggle="dropdownAvatar"
               onClick={() => setDropDownActive(!dropDownActive)}
-              className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 "
+              className="z-10 mx-3 flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300 md:mr-0"
               type="button"
             >
-              {user.mainPicture ? (
-                <Image
-                  className="w-12 h-12 rounded-full"
-                  src={user.mainPicture}
-                  alt="user photo"
-                  width={50}
-                  height={50}
-                />
-              ) : (
-                <Image
-                  src="/blank-profile-icon.webp"
-                  className="w-12 h-12 rounded-full"
-                  alt="user photo"
-                  width={50}
-                  height={50}
-                />
-              )}
+              <Image
+                className="h-12 w-12 rounded-full"
+                id="userPhoto"
+                src={
+                  user.mainPicture
+                    ? user.mainPicture
+                    : "/blank-profile-icon.webp"
+                }
+                alt="User photo"
+                width={50}
+                height={50}
+              />
             </button>
 
             <div
               ref={dropdownRef}
               id="dropdownAvatar"
-              className={`z-10 -left-28 ${
+              className={`-left-28 z-10 ${
                 dropDownActive ? "opacity-100" : "opacity-0"
-              } transition-opacity ease-in-out delay-150 duration-1000 ${
+              } transition-opacity delay-150 duration-1000 ease-in-out ${
                 dropDownActive ? "absolute" : "hidden"
-              } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 `}
+              } w-44 divide-y divide-gray-100 rounded-lg bg-white shadow`}
             >
-              <div className="px-4 py-3 text-sm text-gray-900 ">
+              <div className="px-4 py-3 text-sm text-gray-900">
                 <div>
                   Hi, {user.name} {user?.lastname}
                 </div>
-                <div className="font-medium truncate">{user.email}</div>
+                <div className="truncate font-medium">{user.email}</div>
               </div>
               <ul
-                className="py-2 text-sm text-gray-700 "
+                className="py-2 text-sm text-gray-700"
                 aria-labelledby="dropdownUserAvatarButton"
               >
                 <li>
                   <Link
                     href="/settings"
                     onClick={() => setDropDownActive(false)}
-                    className="block px-4 py-2 hover:bg-gray-100 "
+                    className="block px-4 py-2 hover:bg-gray-100"
                   >
                     Settings
                   </Link>
