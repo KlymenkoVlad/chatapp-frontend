@@ -36,6 +36,7 @@ const MessageBar = () => {
   const messageEdit = useMessageStore((state) => state.messageEdit);
   const dropDownRef = useRef<any>(null);
 
+  console.log(userId);
   const socket = useRef<Socket | null>();
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -430,7 +431,7 @@ const MessageBar = () => {
               </div>
             ))}
         </div>
-        <div className="h-[70vh] bg-gray-100 p-2 small:h-[60vh] mid:h-[42vh] tall:h-[30vh] large:h-[20vh]">
+        <div className="h-[70vh] border-t bg-white p-2 small:h-[60vh] mid:h-[42vh] tall:h-[30vh] large:h-[20vh]">
           <form onSubmit={(e) => handleSendMessage(e)} className="h-full">
             <label htmlFor="chat" className="sr-only">
               Your message

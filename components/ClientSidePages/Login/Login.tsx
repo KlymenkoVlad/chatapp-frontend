@@ -64,6 +64,7 @@ export default function Login() {
                 headers: { Authorization: res?.data.token },
               });
 
+              localStorage.setItem("userId", data._id);
               useChatStore.setState({ userId: data._id });
 
               toast.dismiss();

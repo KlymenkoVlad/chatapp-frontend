@@ -4,10 +4,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { BiSearch } from "react-icons/bi";
 
-interface ISearchProps {
-  smallSearch?: boolean;
-}
-const Search = ({ smallSearch }: ISearchProps) => {
+const Search = () => {
   const router = useRouter();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -20,15 +17,13 @@ const Search = ({ smallSearch }: ISearchProps) => {
     formElement.reset();
   };
   return (
-    <form action="submit" onSubmit={handleSubmit}>
+    <form action="submit" onSubmit={handleSubmit} className="w-full">
       <div className="relative">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"></div>
         <input
           type="search"
           id="default-search"
-          className={`focus:shadow-outline h-12 invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none ${
-            smallSearch ? "sm:w-[320px]" : "sm:w-[400px] lg:w-[550px]"
-          } block rounded-lg border-gray-300 bg-gray-50 p-4 pl-10 text-sm text-gray-900 shadow-md`}
+          className={`focus:shadow-outline block h-12 w-full rounded-lg border-gray-300 bg-gray-50 p-4 pl-10 text-sm text-gray-900 shadow-md invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none`}
           placeholder="Find your friends..."
           required
         />

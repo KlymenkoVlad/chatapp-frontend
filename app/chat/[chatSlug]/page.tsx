@@ -17,10 +17,8 @@ export default async function Page({ params }: PageProps) {
   tokenCheckClient();
   return (
     <main className="flex max-w-full items-start">
-      <div className="ml-3 hidden md:block">
-        <div className="mx-auto mb-10 flex items-end p-2">
-          <Search smallSearch={true} />
-        </div>
+      <div className="ml-3 mt-3 hidden md:block">
+        <Search />
         <ChatBar />
       </div>
       <MessageBar />

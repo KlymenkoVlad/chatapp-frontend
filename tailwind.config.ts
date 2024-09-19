@@ -22,6 +22,7 @@ const config: Config = {
       lg: "1024px",
       xl: "1280px",
       "2xl": "1536px",
+
       small: { raw: "(min-height: 300px)" },
       mid: { raw: "(min-height: 450px)" },
       tall: { raw: "(min-height: 600px)" },

@@ -69,44 +69,40 @@ const ProfileMenu = () => {
   }, []);
 
   return (
-    <div>
+    <button
+      id="dropdownUserAvatarButton"
+      data-dropdown-toggle="dropdownAvatar"
+      onClick={() => setDropDownActive(!dropDownActive)}
+      className="relative z-10 h-12 min-w-12 rounded-full text-sm focus:ring-4 focus:ring-gray-300"
+      type="button"
+    >
       {loading ? (
         <Image
           src="/blank-profile-icon.webp"
           className="h-12 w-12 animate-pulse rounded-full"
           alt="user photo"
-          width={50}
-          height={50}
+          width={100}
+          height={100}
         />
       ) : (
         user && (
-          <div className="relative">
-            <button
-              id="dropdownUserAvatarButton"
-              data-dropdown-toggle="dropdownAvatar"
-              onClick={() => setDropDownActive(!dropDownActive)}
-              className="z-10 mx-3 flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300 md:mr-0"
-              type="button"
-            >
-              <Image
-                className="h-12 w-12 rounded-full"
-                id="userPhoto"
-                src={
-                  user.mainPicture
-                    ? user.mainPicture
-                    : "/blank-profile-icon.webp"
-                }
-                alt="User photo"
-                width={50}
-                height={50}
-              />
-            </button>
+          <>
+            <Image
+              className="h-12 w-12 rounded-full"
+              id="userPhoto"
+              src={
+                user.mainPicture ? user.mainPicture : "/blank-profile-icon.webp"
+              }
+              alt="User photo"
+              width={100}
+              height={100}
+            />
 
             <div
               ref={dropdownRef}
               id="dropdownAvatar"
-              className={`-left-28 z-10 ${
-                dropDownActive ? "opacity-100" : "opacity-0"
+              className={`top-14 z-10 text-left ${
+                dropDownActive ? "right-0 opacity-100" : "opacity-0"
               } transition-opacity delay-150 duration-1000 ease-in-out ${
                 dropDownActive ? "absolute" : "hidden"
               } w-44 divide-y divide-gray-100 rounded-lg bg-white shadow`}
@@ -146,10 +142,10 @@ const ProfileMenu = () => {
                 </li>
               </ul>
             </div>
-          </div>
+          </>
         )
       )}
-    </div>
+    </button>
   );
 };
 

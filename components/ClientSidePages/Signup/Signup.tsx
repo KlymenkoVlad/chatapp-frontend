@@ -106,6 +106,13 @@ export default function Signup() {
                 headers: { Authorization: res?.data.token },
               });
 
+              console.log(data._id);
+              if (data._id) {
+                return toast.error(
+                  "Something went wrong with Authorization data",
+                );
+              }
+
               useChatStore.setState({ userId: data._id });
 
               toast.dismiss();
