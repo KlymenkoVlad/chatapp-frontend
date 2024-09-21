@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import MessageBar from "@/components/common/MessageBarComponents/MessagesBar";
 import ChatBar from "@/components/common/ChatBarComponents/ChatBar";
-import { tokenCheckClient } from "@/utils/authorizationCheck";
+import { authorizedCheck } from "@/utils/authorizationCheck";
 import Search from "@/components/common/LayoutComponents/clientHeader/Search";
 
 export const metadata: Metadata = {
@@ -14,13 +14,11 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  tokenCheckClient();
+  authorizedCheck();
   return (
-    <main className="max-w-full flex items-start ">
-      <div className="hidden md:block ml-3">
-        <div className="mb-10 flex items-end mx-auto p-2">
-          <Search smallSearch={true} />
-        </div>
+    <main className="flex max-w-full items-start">
+      <div className="ml-3 mt-3 hidden md:block">
+        <Search />
         <ChatBar />
       </div>
       <MessageBar />

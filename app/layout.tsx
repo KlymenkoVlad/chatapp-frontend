@@ -3,9 +3,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 
-import Footer from "@/components/common/LayoutComponents/Footer";
-import Header from "@/components/common/LayoutComponents/Header";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

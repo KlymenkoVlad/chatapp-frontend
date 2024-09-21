@@ -14,7 +14,7 @@ export interface IChat {
   messagesWith: string;
   user: IUser;
   lastMessage?: string;
-  date?: string;
+  date?: Date;
 }
 
 export interface IMessage {

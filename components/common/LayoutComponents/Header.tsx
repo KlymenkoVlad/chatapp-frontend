@@ -1,24 +1,20 @@
-"use client";
-
-import { usePathname } from "next/navigation";
 import React from "react";
 import Search from "./clientHeader/Search";
 import ProfileMenu from "./clientHeader/ProfileMenu";
+import Link from "next/link";
 
 const Header = () => {
-  //TODO: Not work showing of header when i go from login page
-  const pathname = usePathname();
-  const showHeader = pathname !== "/login" && pathname !== "/signup";
-
   return (
-    showHeader && (
-      <header className="bg-white border-gray-200 ">
-        <div className="max-w-screen-xl flex items-center justify-evenly mx-auto p-2">
-          <Search />
-          <ProfileMenu />
-        </div>
-      </header>
-    )
+    <header className="mx-auto flex max-w-screen-xl items-center justify-between gap-x-2 border-gray-200 bg-white p-2 sm:gap-x-10">
+      <Link
+        href="/chat"
+        className="hidden text-3xl font-bold text-blue-600 transition-colors hover:text-blue-500 sm:block"
+      >
+        Newchat
+      </Link>
+      <Search />
+      <ProfileMenu />
+    </header>
   );
 };
 

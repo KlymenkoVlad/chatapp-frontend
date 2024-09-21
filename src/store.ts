@@ -4,7 +4,6 @@ import { persist } from "zustand/middleware";
 
 interface ChatState {
   activeChatUsername?: string;
-  userId?: string;
   chats: IChat[];
 }
 
@@ -16,13 +15,12 @@ export const useChatStore = create(
   persist<ChatState>(
     (set, get) => ({
       activeChatUsername: undefined,
-      userId: undefined,
       chats: [],
     }),
     {
       name: "chat-storage", // name of the item in the storage (must be unique)
-    }
-  )
+    },
+  ),
 );
 
 export const useMessageStore = create<MessageStore>()((set) => ({

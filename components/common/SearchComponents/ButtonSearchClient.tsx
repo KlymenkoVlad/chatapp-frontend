@@ -10,25 +10,30 @@ import { IUser } from "@/types/interfaces";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { toast } from "sonner";
 import { Socket, io } from "socket.io-client";
-
+import Cookies from "js-cookie";
 interface ButtonSearchClientProps {
   user: IUser;
   token?: RequestCookie;
 }
 
 const ButtonSearchClient = ({ user, token }: ButtonSearchClientProps) => {
-  if (!token) {
+  const userId = localStorage.getItem("userId");
+
+  if (!token || !userId) {
+    toast.error("Please log in your account");
+    Cookies.remove("token");
     redirect("/login");
   }
+
   const router = useRouter();
-  const userId = useChatStore((state) => state.userId);
+
   const socket = useRef<Socket | null>();
 
   const handleStartTalk = async (
     userIdReceiver: string,
     userId: string | undefined,
     username: string,
-    token: RequestCookie
+    token: RequestCookie,
   ) => {
     if (!socket.current) {
       socket.current = io(baseUrl);
@@ -40,7 +45,7 @@ const ButtonSearchClient = ({ user, token }: ButtonSearchClientProps) => {
         userId,
         msgSendToUserId: userIdReceiver,
       },
-      { headers: { Authorization: token.value } }
+      { headers: { Authorization: token.value } },
     );
 
     // Check if the chat entry already exists in the state
@@ -66,7 +71,7 @@ const ButtonSearchClient = ({ user, token }: ButtonSearchClientProps) => {
         toast.success("Here's your chat with " + user.username);
         router.push(`/chat/${user._id}`);
       }}
-      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1.5 "
+      className="rounded-lg bg-blue-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
     >
       Start talking
     </button>

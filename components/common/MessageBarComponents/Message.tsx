@@ -43,40 +43,40 @@ const Message = ({
 
   return (
     <div
-      className={`relative flex max-w-[400px] mt-2 space-x-3 ${
+      className={`relative mt-2 flex max-w-[400px] space-x-3 ${
         message.sender === userId && "ml-auto justify-end"
       } group`}
       key={message._id}
     >
       <div>
         <div
-          className={`p-3  ${
+          className={`p-3 ${
             message.sender === userId
               ? messageEdit === message._id
-                ? "bg-blue-900 text-white rounded-l-lg rounded-br-lg"
-                : "bg-blue-600 text-white rounded-l-lg rounded-br-lg"
-              : "bg-gray-300 rounded-r-lg rounded-bl-lg"
+                ? "rounded-l-lg rounded-br-lg bg-blue-900 text-white"
+                : "rounded-l-lg rounded-br-lg bg-blue-600 text-white"
+              : "rounded-r-lg rounded-bl-lg bg-gray-300"
           }`}
         >
-          <p className="text-sm break-all">{message.msg}</p>
+          <p className="break-all text-sm">{message.msg}</p>
         </div>
         <span
-          className={`text-xs text-gray-500 leading-none  duration-500 ${
+          className={`text-xs leading-none text-gray-500 duration-500 ${
             message.sender === userId &&
-            "transition-opacity ease-in-out opacity-100 group-hover:opacity-0"
-          }  `}
+            "opacity-100 transition-opacity ease-in-out group-hover:opacity-0"
+          } `}
         >
           {dateFormat(message.date)}
         </span>
       </div>
       {message.sender === userId && (
-        <div className="flex absolute -bottom-1 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+        <div className="absolute -bottom-1 flex opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
           <MdModeEditOutline
-            className="text-2xl hover:fill-gray-600 transition-colors duration-300 ease-in-out"
+            className="text-2xl transition-colors duration-300 ease-in-out hover:fill-gray-600"
             onClick={() => handleMessageEdit()}
           />
           <MdDelete
-            className="text-2xl hover:fill-gray-600 transition-colors duration-300 ease-in-out"
+            className="text-2xl transition-colors duration-300 ease-in-out hover:fill-gray-600"
             onClick={() => handleMessageDelete()}
           />
         </div>

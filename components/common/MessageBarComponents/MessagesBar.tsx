@@ -13,16 +13,18 @@ import axios from "axios";
 import { MdArrowBack, MdCancel, MdSend } from "react-icons/md";
 import Cookies from "js-cookie";
 import Image from "next/image";
+
 const MessageBar = () => {
   const [receiverUser, setReceiverUser] = useState<undefined | IUser>(
-    undefined
+    undefined,
   );
   const [messages, setMessages] = useState<IMessage[] | []>([]);
   const [messageInput, setMessageInput] = useState("");
   const [userTyping, setUserTyping] = useState<undefined | string>(undefined);
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | undefined>(
-    undefined
+    undefined,
   );
+  const [userId, setUserId] = useState<string | null>();
 
   const [dropDownActive, setDropDownActive] = useState(false);
 
@@ -32,7 +34,6 @@ const MessageBar = () => {
   const router = useRouter();
 
   const activeChatUsername = useChatStore((state) => state.activeChatUsername);
-  const userId = useChatStore((state) => state.userId);
   const messageEdit = useMessageStore((state) => state.messageEdit);
   const dropDownRef = useRef<any>(null);
 
@@ -40,11 +41,13 @@ const MessageBar = () => {
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    setUserId(localStorage.getItem("userId"));
+
     const fetchChats = async () => {
       try {
         const { data } = await axios.get(
           `${baseUrl}/api/user/${activeChatId}`,
-          { headers: { Authorization: token } }
+          { headers: { Authorization: token } },
         );
         setReceiverUser(data);
         console.log(data);
@@ -108,7 +111,7 @@ const MessageBar = () => {
     socket.current.on("msgDeletedReceived", async ({ userMessageIndex }) => {
       console.log("Message deleted");
       setMessages((prev) =>
-        prev.filter((_, index) => index !== userMessageIndex)
+        prev.filter((_, index) => index !== userMessageIndex),
       );
     });
   }, [activeChatId]);
@@ -138,7 +141,7 @@ const MessageBar = () => {
         useMessageStore.setState({
           messageEdit: undefined,
         });
-      }
+      },
     );
   }, [activeChatId]);
 
@@ -275,24 +278,24 @@ const MessageBar = () => {
 
   const MessageNav = () => {
     return (
-      <div className="p-3 flex items-center justify-between font-bold relative">
+      <div className="relative flex items-center justify-between p-3 font-bold">
         <div className="flex">
           <button
             type="button"
-            onClick={() => router.push("/")}
-            className="mr-2 ms:mr-5 h-[40px] w-[40px] inline-flex justify-center items-center  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 "
+            onClick={() => router.back()}
+            className="mr-2 inline-flex h-[40px] w-[40px] items-center justify-center rounded-full bg-blue-700 p-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 ms:mr-5"
           >
             <MdArrowBack className="text-2xl" />
           </button>
 
           {receiverUser ? (
-            <div className="flex items-center ">
+            <div className="flex items-center">
               {receiverUser.mainPicture ? (
                 <Image
                   width={40}
                   height={40}
                   onClick={() => setDropDownActive(!dropDownActive)}
-                  className="cursor-pointer w-12 h-12 rounded-full mr-1 ms:mr-5"
+                  className="mr-1 h-12 w-12 cursor-pointer rounded-full ms:mr-5"
                   src={receiverUser.mainPicture}
                   alt="user photo"
                 />
@@ -302,7 +305,7 @@ const MessageBar = () => {
                   height={40}
                   onClick={() => setDropDownActive(!dropDownActive)}
                   src="/blank-profile-icon.webp"
-                  className="cursor-pointer w-12 h-12 rounded-full mr-1 ms:mr-5"
+                  className="mr-1 h-12 w-12 cursor-pointer rounded-full ms:mr-5"
                   alt="user photo"
                 />
               )}
@@ -310,13 +313,13 @@ const MessageBar = () => {
               <div
                 ref={dropDownRef}
                 id="dropdownAvatar"
-                className={`z-10 top-16 w-fit max-w-[400px] font-normal ${
+                className={`top-16 z-10 w-fit max-w-[400px] font-normal ${
                   dropDownActive ? "opacity-100" : "opacity-0"
-                } transition-opacity ease-in-out delay-150 duration-1000 ${
+                } transition-opacity delay-150 duration-1000 ease-in-out ${
                   dropDownActive ? "absolute" : "hidden"
-                } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 `}
+                } w-44 divide-y divide-gray-100 rounded-lg bg-white shadow`}
               >
-                <div className=" px-4 py-3 text-sm text-gray-900 flex flex-col ">
+                <div className="flex flex-col px-4 py-3 text-sm text-gray-900">
                   {receiverUser.name && (
                     <p>
                       <span className="font-bold">Name:</span>{" "}
@@ -332,7 +335,7 @@ const MessageBar = () => {
                   <p>
                     <span className="font-bold">Email:</span>{" "}
                     <a
-                      className="hover:text-blue-700 text-blue-500 transition-colors"
+                      className="text-blue-500 transition-colors hover:text-blue-700"
                       href={`mailto:${receiverUser?.email}`}
                     >
                       {receiverUser?.email}
@@ -346,13 +349,13 @@ const MessageBar = () => {
               </div>
 
               <div className="h-full">
-                <p className=" font-bold">{receiverUser.name}</p>
+                <p className="font-bold">{receiverUser.name}</p>
                 {userTyping && (
-                  <p className="font-semibold text-blue-700 ">
+                  <p className="font-semibold text-blue-700">
                     is typing <span className="animate-ping">.</span>
                     <span
                       style={{ animationDelay: "0.3s" }}
-                      className="animate-ping "
+                      className="animate-ping"
                     >
                       .
                     </span>
@@ -372,11 +375,11 @@ const MessageBar = () => {
                 src="/blank-profile-icon.webp"
                 width={40}
                 height={40}
-                className="w-12 h-12 rounded-full mr-1 ms:mr-5 animate-pulse"
+                className="mr-1 h-12 w-12 animate-pulse rounded-full ms:mr-5"
                 alt="user photo"
               />
 
-              <div className="animate-pulse h-2 w-14 bg-slate-300 rounded "></div>
+              <div className="h-2 w-14 animate-pulse rounded bg-slate-300"></div>
             </div>
           )}
         </div>
@@ -388,20 +391,20 @@ const MessageBar = () => {
                 useMessageStore.setState({ messageEdit: undefined });
                 setMessageInput("");
               }}
-              className=" text-center hidden ms:flex"
+              className="hidden text-center ms:flex"
             >
               Cancel editing message
-              <MdCancel className="text-2xl ml-2 fill-red-600" />
+              <MdCancel className="ml-2 fill-red-600 text-2xl" />
             </button>
             <button
               onClick={() => {
                 useMessageStore.setState({ messageEdit: undefined });
                 setMessageInput("");
               }}
-              className=" text-center flex ms:hidden"
+              className="flex text-center ms:hidden"
             >
               Cancel editing
-              <MdCancel className="text-2xl ml-2 fill-red-600" />
+              <MdCancel className="ml-2 fill-red-600 text-2xl" />
             </button>
           </>
         )}
@@ -410,32 +413,34 @@ const MessageBar = () => {
   };
 
   return (
-    <div className="md:ml-4 flex flex-col h-screen w-full">
+    <div className="flex h-screen w-full flex-col md:ml-4">
       <MessageNav />
-      <div className="flex-grow border overflow-hidden">
+      <div className="flex-grow overflow-hidden border">
         <div
-          className="p-2 h-[30vh] exralarge:h-[80vh] large:h-[74vh] tall:h-[68vh] mid:h-[58vh] small:h-[38vh] overflow-y-auto"
+          className="h-[30vh] overflow-y-auto p-2 small:h-[38vh] mid:h-[58vh] tall:h-[68vh] large:h-[74vh] exralarge:h-[80vh]"
           ref={messagesContainerRef}
         >
           {messages &&
             messages.length > 0 &&
             messages.map((message, index) => (
               <div className="mx-2 cursor-pointer">
-                <Message
-                  key={index}
-                  userId={userId}
-                  message={message}
-                  setMessageInput={setMessageInput}
-                />
+                {userId && (
+                  <Message
+                    key={index}
+                    userId={userId}
+                    message={message}
+                    setMessageInput={setMessageInput}
+                  />
+                )}
               </div>
             ))}
         </div>
-        <div className=" bg-gray-100 p-2 h-[70vh] large:h-[20vh] tall:h-[30vh] mid:h-[42vh] small:h-[60vh]">
+        <div className="h-[70vh] border-t bg-white p-2 small:h-[60vh] mid:h-[42vh] tall:h-[30vh] large:h-[20vh]">
           <form onSubmit={(e) => handleSendMessage(e)} className="h-full">
             <label htmlFor="chat" className="sr-only">
               Your message
             </label>
-            <div className="flex items-center px-3 py-2 rounded-lg">
+            <div className="flex items-center rounded-lg px-3 py-2">
               <textarea
                 id="chat"
                 rows={2}
@@ -443,15 +448,12 @@ const MessageBar = () => {
                 onInput={handleTyping}
                 onBlur={handleStopTyping}
                 onChange={(e) => setMessageInput(e.target.value)}
-                className={`max-h-24 h-24 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-              disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-              invalid:border-pink-500 invalid:text-pink-600
-              focus:invalid:border-pink-500 focus:invalid:ring-pink-500 focus:shadow-outline  block mx-2 p-2.5 w-full text-sm bg-white text-gray-900 rounded-lg border border-gray-300 `}
+                className={`focus:shadow-outline mx-2 block h-24 max-h-24 w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none`}
                 placeholder="Your message..."
               ></textarea>
               <button
                 type="submit"
-                className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100"
+                className="inline-flex cursor-pointer justify-center rounded-full p-2 text-blue-600 hover:bg-blue-100"
               >
                 <MdSend className="text-2xl" />
                 <span className="sr-only">Send message</span>
