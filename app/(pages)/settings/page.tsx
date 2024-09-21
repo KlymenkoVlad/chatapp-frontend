@@ -1,10 +1,10 @@
 import ButtonReturnSearchClient from "@/components/common/SearchComponents/ButtonReturnSearchClient";
 import PasswordForm from "@/components/common/SettingsComponents/PasswordForm";
 import SettingsForm from "@/components/common/SettingsComponents/SettingsForm";
-import { tokenCheckClient } from "@/utils/authorizationCheck";
 import { baseUrl } from "@/utils/baseUrl";
 import type { Metadata } from "next";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Profile Settings",
@@ -34,7 +34,9 @@ async function getData(token: RequestCookie | undefined) {
 }
 
 export default async function Page() {
-  const token = tokenCheckClient(false);
+  const cookieStore = cookies();
+  const token = cookieStore.get("token");
+
   const user = await getData(token);
 
   return (

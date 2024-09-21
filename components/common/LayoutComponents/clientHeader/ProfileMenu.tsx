@@ -130,7 +130,8 @@ const ProfileMenu = () => {
                   <button
                     onClick={() => {
                       Cookies.remove("token");
-                      useChatStore.setState({ userId: "", chats: [] });
+                      useChatStore.setState({ chats: [] });
+                      localStorage.removeItem("userId");
                       setDropDownActive(false);
                       toast.success("Logged out successfully");
                       router.push("/login");

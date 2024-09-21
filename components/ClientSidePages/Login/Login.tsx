@@ -8,7 +8,6 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { baseUrl } from "@/utils/baseUrl";
-import { useChatStore } from "@/src/store";
 import Image from "next/image";
 
 const LoginSchema = Yup.object().shape({
@@ -65,7 +64,6 @@ export default function Login() {
               });
 
               localStorage.setItem("userId", data._id);
-              useChatStore.setState({ userId: data._id });
 
               toast.dismiss();
               toast.success("Logged in successfully");

@@ -154,21 +154,20 @@ const ChatBar = () => {
       ) : chats && chats.length > 0 ? (
         chats.map((chat) => <Chat key={chat.messagesWith} {...chat} />)
       ) : (
-        <div className="flex flex-col items-center justify-center text-center">
+        <div className="mt-5 flex flex-col items-center justify-center text-center">
           <Image
-            width={150}
-            height={150}
+            width={100}
+            height={100}
             src="/no-chat-error.png"
-            sizes="(max-width: 768px) 100vw, 33vw"
-            className="h-36 w-36"
+            className="h-24 w-24"
             alt=""
           />
-          <p className="text-center text-2xl font-bold md:text-5xl">
+          <p className="mb-4 text-center text-2xl font-bold md:text-4xl">
             No messages yet.
           </p>
           <p className="">
             No messages in your inbox, yet! Start chatting with people around
-            you. You can find them above
+            you. <span className="font-semibold">Look for them above</span>
           </p>
         </div>
       )}

@@ -1,14 +1,12 @@
 "use client";
 import * as Yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { baseUrl } from "@/utils/baseUrl";
-import { useChatStore } from "@/src/store";
 import PreviewImage from "./components/PreviewImage";
 import Image from "next/image";
 
@@ -35,34 +33,34 @@ export default function Signup() {
   const router = useRouter();
 
   return (
-    <div className={`my-4 flex h-fit items-center justify-center`}>
-      <div className="w-full max-w-md rounded-lg bg-white p-4 shadow-lg">
-        <Image
-          src="/app-logo.png"
-          width={80}
-          height={80}
-          alt="logo"
-          className="mx-auto mb-5"
-        />
-        <h1 className="mb-2 text-center text-3xl font-semibold text-gray-800">
-          Messenger
-        </h1>
-        <h2 className="mb-4 text-center text-xl text-gray-800">
-          Below you can signup
-        </h2>
-        <Formik
-          initialValues={{
-            email: "",
-            name: "",
-            lastname: "",
-            password: "",
-            username: "",
-            terms: true,
-            mainPicture: "" as File | string,
-          }}
-          validationSchema={SignupSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            const dataSubmit = async () => {
+    <div className="relative">
+      <div className={`my-4 flex h-fit items-center justify-center`}>
+        <div className="z-10 w-full max-w-md rounded-lg bg-white p-4 shadow-lg">
+          <Image
+            src="/app-logo.png"
+            width={100}
+            height={100}
+            alt="logo"
+            className="mx-auto mb-2 h-16 w-16"
+          />
+          <h1 className="mb-2 text-center text-3xl font-semibold text-gray-800">
+            Messenger
+          </h1>
+          <h2 className="mb-4 text-center text-xl text-gray-800">
+            Below you can signup
+          </h2>
+          <Formik
+            initialValues={{
+              email: "",
+              name: "",
+              lastname: "",
+              password: "",
+              username: "",
+              terms: true,
+              mainPicture: "" as File | string,
+            }}
+            validationSchema={SignupSchema}
+            onSubmit={async (values, { setSubmitting }) => {
               toast.loading("Wait, we are creating your account");
               const imageLoaded = async () => {
                 if (values.mainPicture instanceof File) {
@@ -112,179 +110,179 @@ export default function Signup() {
                   "Something went wrong with Authorization data",
                 );
               }
-
-              useChatStore.setState({ userId: data._id });
+              localStorage.setItem("userId", data._id);
 
               toast.dismiss();
               toast.success("Your account has been created");
 
               router.push("/chat");
+
               setSubmitting(false);
-            };
+            }}
+          >
+            {({ isSubmitting, setFieldValue, values, errors }) => (
+              <Form>
+                <div className="mb-10 bg-white">
+                  <label
+                    className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
+                    htmlFor="username"
+                  >
+                    Your username
+                  </label>
+                  <Field
+                    className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
+                    id="username"
+                    name="username"
+                    type="text"
+                  />
+                  <ErrorMessage
+                    name="username"
+                    component="div"
+                    className="mt-2 text-red-500"
+                  />
+                </div>
 
-            dataSubmit();
-          }}
-        >
-          {({ isSubmitting, setFieldValue, values, errors }) => (
-            <Form>
-              <div className="mb-10 bg-white">
-                <label
-                  className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
-                  htmlFor="username"
-                >
-                  Your username
-                </label>
-                <Field
-                  className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
-                  id="username"
-                  name="username"
-                  type="text"
-                />
-                <ErrorMessage
-                  name="username"
-                  component="div"
-                  className="mt-2 text-red-500"
-                />
-              </div>
+                <div className="mb-10 bg-white">
+                  <label
+                    className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
+                    htmlFor="email"
+                  >
+                    Your email
+                  </label>
+                  <Field
+                    className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
+                    id="email"
+                    name="email"
+                    type="email"
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="mt-2 text-red-500"
+                  />
+                </div>
 
-              <div className="mb-10 bg-white">
-                <label
-                  className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
-                  htmlFor="email"
-                >
-                  Your email
-                </label>
-                <Field
-                  className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
-                  id="email"
-                  name="email"
-                  type="email"
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className="mt-2 text-red-500"
-                />
-              </div>
+                <div className="mb-10 bg-white">
+                  <label
+                    className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
+                    htmlFor="name"
+                  >
+                    Your name <span className="text-red-500">(optional)</span>
+                  </label>
+                  <Field
+                    className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
+                    id="name"
+                    name="name"
+                    type="text"
+                  />
+                  <ErrorMessage
+                    name="name"
+                    component="div"
+                    className="mt-2 text-red-500"
+                  />
+                </div>
 
-              <div className="mb-10 bg-white">
-                <label
-                  className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
-                  htmlFor="name"
-                >
-                  Your name <span className="text-red-500">(optional)</span>
-                </label>
-                <Field
-                  className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
-                  id="name"
-                  name="name"
-                  type="text"
-                />
-                <ErrorMessage
-                  name="name"
-                  component="div"
-                  className="mt-2 text-red-500"
-                />
-              </div>
+                <div className="mb-10 bg-white">
+                  <label
+                    className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
+                    htmlFor="lastname"
+                  >
+                    Your last name{" "}
+                    <span className="text-red-500">(optional)</span>
+                  </label>
+                  <Field
+                    className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
+                    id="lastname"
+                    name="lastname"
+                    type="text"
+                  />
+                  <ErrorMessage
+                    name="lastname"
+                    component="div"
+                    className="mt-2 text-red-500"
+                  />
+                </div>
 
-              <div className="mb-10 bg-white">
-                <label
-                  className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
-                  htmlFor="lastname"
-                >
-                  Your last name{" "}
-                  <span className="text-red-500">(optional)</span>
-                </label>
-                <Field
-                  className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
-                  id="lastname"
-                  name="lastname"
-                  type="text"
-                />
-                <ErrorMessage
-                  name="lastname"
-                  component="div"
-                  className="mt-2 text-red-500"
-                />
-              </div>
+                <div className="mb-10 bg-white">
+                  <label
+                    className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
+                    htmlFor="password"
+                  >
+                    Your Password
+                  </label>
+                  <Field
+                    className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
+                    name="password"
+                    type="password"
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="mt-2 text-red-500"
+                  />
+                </div>
 
-              <div className="mb-10 bg-white">
-                <label
-                  className="bottom-8 left-0 -translate-y-2 text-sm text-gray-500 transition-transform duration-300"
-                  htmlFor="password"
-                >
-                  Your Password
-                </label>
-                <Field
-                  className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-500 disabled:shadow-none"
-                  name="password"
-                  type="password"
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="mt-2 text-red-500"
-                />
-              </div>
+                <div className="mb-10 bg-white">
+                  <label
+                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    htmlFor="file_input"
+                  >
+                    Choose main picture of product
+                  </label>
+                  <input
+                    className="block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-sky-600 dark:bg-sky-700 dark:text-gray-400 dark:placeholder-gray-400"
+                    id="file_input"
+                    accept="image/*"
+                    name="mainPicture"
+                    type="file"
+                    onChange={(event) => {
+                      const files = event?.target.files;
+                      if (files && files.length > 0) {
+                        setFieldValue("mainPicture", files[0]);
+                      }
+                    }}
+                  />
+                  {errors.mainPicture && (
+                    <div className="mt-2 text-red-500">
+                      {errors.mainPicture}
+                    </div>
+                  )}
 
-              <div className="mb-10 bg-white">
-                <label
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  htmlFor="file_input"
-                >
-                  Choose main picture of product
-                </label>
-                <input
-                  className="block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-sky-600 dark:bg-sky-700 dark:text-gray-400 dark:placeholder-gray-400"
-                  id="file_input"
-                  accept="image/*"
-                  name="mainPicture"
-                  type="file"
-                  onChange={(event) => {
-                    const files = event?.target.files;
-                    if (files && files.length > 0) {
-                      setFieldValue("mainPicture", files[0]);
-                    }
-                  }}
-                />
-                {errors.mainPicture && (
-                  <div className="mt-2 text-red-500">{errors.mainPicture}</div>
-                )}
+                  {values.mainPicture && (
+                    <PreviewImage file={values.mainPicture} />
+                  )}
+                </div>
 
-                {values.mainPicture && (
-                  <PreviewImage file={values.mainPicture} />
-                )}
-              </div>
+                <div className="mb-6">
+                  <label>
+                    <Field name="terms" type="checkbox" className="mr-2" />
+                    Agree to the privacy policy
+                  </label>
+                  <ErrorMessage
+                    name="terms"
+                    component="div"
+                    className="mb-6 mt-2 text-red-500"
+                  />
+                </div>
 
-              <div className="mb-6">
-                <label>
-                  <Field name="terms" type="checkbox" className="mr-2" />
-                  Agree to the privacy policy
-                </label>
-                <ErrorMessage
-                  name="terms"
-                  component="div"
-                  className="mb-6 mt-2 text-red-500"
-                />
-              </div>
+                <Link href="/login" className="my-8">
+                  <p className="duration-600 text-black transition-colors ease-in-out hover:text-blue-500">
+                    Already have an account?
+                  </p>
+                </Link>
 
-              <Link href="/login" className="my-8">
-                <p className="duration-600 text-black transition-colors ease-in-out hover:text-blue-500">
-                  Already have an account?
-                </p>
-              </Link>
-
-              <div className="mt-6">
-                <button
-                  type="submit"
-                  className="w-full rounded-full bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                >
-                  Sign Up
-                </button>
-              </div>
-            </Form>
-          )}
-        </Formik>
+                <div className="mt-6">
+                  <button
+                    type="submit"
+                    className="w-full rounded-full bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
     </div>
   );

@@ -10,18 +10,23 @@ import { IUser } from "@/types/interfaces";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { toast } from "sonner";
 import { Socket, io } from "socket.io-client";
-
+import Cookies from "js-cookie";
 interface ButtonSearchClientProps {
   user: IUser;
   token?: RequestCookie;
 }
 
 const ButtonSearchClient = ({ user, token }: ButtonSearchClientProps) => {
-  if (!token) {
+  const userId = localStorage.getItem("userId");
+
+  if (!token || !userId) {
+    toast.error("Please log in your account");
+    Cookies.remove("token");
     redirect("/login");
   }
+
   const router = useRouter();
-  const userId = useChatStore((state) => state.userId);
+
   const socket = useRef<Socket | null>();
 
   const handleStartTalk = async (

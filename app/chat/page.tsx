@@ -1,6 +1,6 @@
 import ChatBar from "@/components/common/ChatBarComponents/ChatBar";
 import Header from "@/components/common/LayoutComponents/Header";
-import { tokenCheckClient } from "@/utils/authorizationCheck";
+import { authorizedCheck } from "@/utils/authorizationCheck";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function page() {
-  tokenCheckClient();
+  authorizedCheck();
   return (
     <>
       <Header />

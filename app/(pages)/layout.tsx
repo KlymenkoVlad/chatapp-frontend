@@ -1,12 +1,12 @@
 import Header from "@/components/common/LayoutComponents/Header";
-import { tokenCheckClient } from "@/utils/authorizationCheck";
+import { authorizedCheck } from "@/utils/authorizationCheck";
 
 export default function PageLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  tokenCheckClient();
+  authorizedCheck();
 
   return (
     <div>

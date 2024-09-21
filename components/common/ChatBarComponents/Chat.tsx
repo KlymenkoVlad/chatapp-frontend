@@ -51,7 +51,7 @@ const Chat = ({ messagesWith, user, lastMessage, date }: IChat) => {
             </div>
             <div>
               <p className="text-sm text-gray-500">
-                {date && dateFormat(date)}
+                {date && dateFormat(date.toString())}
               </p>
             </div>
           </div>

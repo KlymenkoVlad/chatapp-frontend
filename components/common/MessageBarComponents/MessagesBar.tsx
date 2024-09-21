@@ -13,6 +13,7 @@ import axios from "axios";
 import { MdArrowBack, MdCancel, MdSend } from "react-icons/md";
 import Cookies from "js-cookie";
 import Image from "next/image";
+
 const MessageBar = () => {
   const [receiverUser, setReceiverUser] = useState<undefined | IUser>(
     undefined,
@@ -23,6 +24,7 @@ const MessageBar = () => {
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | undefined>(
     undefined,
   );
+  const [userId, setUserId] = useState<string | null>();
 
   const [dropDownActive, setDropDownActive] = useState(false);
 
@@ -32,15 +34,15 @@ const MessageBar = () => {
   const router = useRouter();
 
   const activeChatUsername = useChatStore((state) => state.activeChatUsername);
-  const userId = useChatStore((state) => state.userId);
   const messageEdit = useMessageStore((state) => state.messageEdit);
   const dropDownRef = useRef<any>(null);
 
-  console.log(userId);
   const socket = useRef<Socket | null>();
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    setUserId(localStorage.getItem("userId"));
+
     const fetchChats = async () => {
       try {
         const { data } = await axios.get(
@@ -422,12 +424,14 @@ const MessageBar = () => {
             messages.length > 0 &&
             messages.map((message, index) => (
               <div className="mx-2 cursor-pointer">
-                <Message
-                  key={index}
-                  userId={userId}
-                  message={message}
-                  setMessageInput={setMessageInput}
-                />
+                {userId && (
+                  <Message
+                    key={index}
+                    userId={userId}
+                    message={message}
+                    setMessageInput={setMessageInput}
+                  />
+                )}
               </div>
             ))}
         </div>

@@ -4,7 +4,6 @@ import { persist } from "zustand/middleware";
 
 interface ChatState {
   activeChatUsername?: string;
-  userId?: string;
   chats: IChat[];
 }
 
@@ -16,7 +15,6 @@ export const useChatStore = create(
   persist<ChatState>(
     (set, get) => ({
       activeChatUsername: undefined,
-      userId: undefined,
       chats: [],
     }),
     {

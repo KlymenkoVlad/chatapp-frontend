@@ -2,17 +2,13 @@
 
 import * as Yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { useEffect, useState } from "react";
-import Link from "next/link";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+
 import { baseUrl } from "@/utils/baseUrl";
-import { useChatStore } from "@/src/store";
-import PreviewImage from "@/components/ClientSidePages/Signup/components/PreviewImage";
 import type { IUser } from "@/types/interfaces";
-import { headers } from "next/headers";
 
 const SignupSchema = Yup.object().shape({
   oldPassword: Yup.string()
@@ -25,7 +21,6 @@ const SignupSchema = Yup.object().shape({
     .min(6, "Password must be at least 6 characters")
     .required("Password is required")
     .test("match", "Inputs must match", function (value) {
-      // 'this' refers to the schema, so you can access 'input1' and 'input2' values using this.parent
       return value === this.parent.newPassword;
     }),
 });
@@ -36,7 +31,7 @@ export default function PasswordForm({ user }: { user: IUser }) {
   return (
     <div className="mb-4 flex items-center justify-center">
       <div className="w-[400px] rounded-lg bg-white p-4 shadow-lg">
-        <h2 className="text-2xl font-semibold text-gray-800">
+        <h2 className="mb-4 text-2xl font-semibold text-gray-800">
           Edit your password
         </h2>
         <Formik
@@ -55,7 +50,7 @@ export default function PasswordForm({ user }: { user: IUser }) {
             const dataSubmit = async () => {
               toast.loading("Wait, we are editing your password");
               try {
-                const res = await axios
+                await axios
                   .post(
                     `${baseUrl}/api/user/updatePassword`,
                     { oldPassword, newPassword },
