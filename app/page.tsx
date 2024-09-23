@@ -37,23 +37,6 @@ export default function Home() {
         >
           Newchat
         </Link>
-        <nav className="hidden justify-around space-x-6 font-semibold sm:flex md:space-x-16">
-          <Link
-            className="transition-colors hover:text-blue-700"
-            href={"/about"}
-          >
-            About
-          </Link>
-          <Link
-            className="transition-colors hover:text-blue-700"
-            href={"contact"}
-          >
-            Contact
-          </Link>
-          <Link className="transition-colors hover:text-blue-700" href={"blog"}>
-            Blog
-          </Link>
-        </nav>
         <Link
           className="hidden rounded-md bg-blue-600 p-3 text-white transition-colors hover:bg-blue-700 sm:block"
           href={"/chat"}
@@ -233,10 +216,10 @@ export default function Home() {
                     “Dependable, Responsive, Professional”
                   </h5>
                   <p className="text-gray-600">
-                    Newmarket is looking magnificent! Every time I use this app
-                    I feel how much works were put in this project. I'm very
-                    glad, that i can use it and I always try to share it with
-                    another people. I look forward to the next big updates.
+                    Newchat is looking magnificent! Every time I use this app I
+                    feel how much works were put in this project. I'm very glad,
+                    that i can use it and I always try to share it with another
+                    people. I look forward to the next big updates.
                   </p>
                 </div>
 

@@ -4,25 +4,22 @@ import { redirect } from "next/navigation";
 
 export const authorizedCheck = (): {
   token: RequestCookie;
-  userId: string;
 } => {
   const cookieStore = cookies();
   const token = cookieStore.get("token");
-  const userId = localStorage.getItem("userId");
 
-  if (!token || !userId) {
+  if (!token) {
     redirect("/login");
   }
 
-  return { token, userId };
+  return { token };
 };
 
 export const notAuthorizedCheck = () => {
   const cookieStore = cookies();
   const token = cookieStore.get("token");
-  const userId = localStorage.getItem("userId");
 
-  if (token || userId) {
+  if (token) {
     redirect("/chat");
   }
 };
